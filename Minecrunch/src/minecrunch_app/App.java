@@ -88,6 +88,7 @@ public class App {
                 URL res6 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno.jpg");
                 URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
                 URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
+                URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
                 File flib1 = new File(home + "\\.minecrunch\\lib\\commons-io-2.4.jar");
                 File flib2 = new File(home + "\\.minecrunch\\lib\\json-simple-1.1.1.jar");
@@ -100,6 +101,7 @@ public class App {
                 File fres6 = new File(home + "\\.minecrunch\\resources\\techno.jpg");
                 File fjar1 = new File(home + "\\.minecrunch\\minecrunch_updater.jar");
                 File fjar2 = new File(home + "\\.minecrunch\\minecrunch_launcher.jar");
+                File fver1 = new File(home + "\\.minecrunch\\resources\\version.txt");
 
                 FileUtils.copyURLToFile(lib1, flib1);
                 FileUtils.copyURLToFile(lib2, flib2);
@@ -112,6 +114,7 @@ public class App {
                 FileUtils.copyURLToFile(res6, fres6);
                 FileUtils.copyURLToFile(jar1, fjar1);
                 FileUtils.copyURLToFile(jar2, fjar2);
+                FileUtils.copyURLToFile(ver1, fver1);
 
                 Component frame = null;
                 JOptionPane.showMessageDialog(frame, "Install complete.");
@@ -153,6 +156,7 @@ public class App {
                 URL res6 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno.jpg");
                 URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
                 URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
+                URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
                 File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
                 File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
@@ -165,6 +169,7 @@ public class App {
                 File fres6 = new File(home + "/.minecrunch/resources/techno.jpg");
                 File fjar1 = new File(home + "/.minecrunch/minecrunch_updater.jar");
                 File fjar2 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
+                File fver1 = new File(home + "/.minecrunch/resources/version.txt");
 
                 FileUtils.copyURLToFile(lib1, flib1);
                 FileUtils.copyURLToFile(lib2, flib2);
@@ -177,6 +182,7 @@ public class App {
                 FileUtils.copyURLToFile(res6, fres6);
                 FileUtils.copyURLToFile(jar1, fjar1);
                 FileUtils.copyURLToFile(jar2, fjar2);
+                FileUtils.copyURLToFile(ver1, fver1);
 
                 Component frame = null;
                 JOptionPane.showMessageDialog(frame, "Install complete.");
@@ -218,6 +224,7 @@ public class App {
                 URL res6 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno.jpg");
                 URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
                 URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
+                URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
                 File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
                 File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
@@ -230,6 +237,7 @@ public class App {
                 File fres6 = new File(home + "/.minecrunch/resources/techno.jpg");
                 File fjar1 = new File(home + "/.minecrunch/minecrunch_updater.jar");
                 File fjar2 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
+                File fver1 = new File(home + "/.minecrunch/resources/version.txt");
 
                 FileUtils.copyURLToFile(lib1, flib1);
                 FileUtils.copyURLToFile(lib2, flib2);
@@ -242,6 +250,7 @@ public class App {
                 FileUtils.copyURLToFile(res6, fres6);
                 FileUtils.copyURLToFile(jar1, fjar1);
                 FileUtils.copyURLToFile(jar2, fjar2);
+                FileUtils.copyURLToFile(ver1, fver1);
 
                 Component frame = null;
                 JOptionPane.showMessageDialog(frame, "Install complete.");
