@@ -29,9 +29,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -55,11 +58,18 @@ public class PackUI extends javax.swing.JFrame {
 
     TechnoServer ts = new TechnoServer();
     Thread technoserver = new Thread(ts);
+    
+    FarmingClient fc = new FarmingClient();
+    Thread farmingclient = new Thread(fc);
+
+    FarmingServer fs = new FarmingServer();
+    Thread farmingserver = new Thread(fs);
 
     /**
      * Creates new form PackUI
      */
     public PackUI() throws IOException {
+        GetResources();
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -67,6 +77,54 @@ public class PackUI extends javax.swing.JFrame {
     // Exit application
     public void Exit() {
         System.exit(0);
+    }
+    
+    public void GetResources() throws MalformedURLException, IOException {
+        // Download all resources
+        // Windows
+        if (os.contains("Windows")) {
+            URL farmjpg = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming.jpg");
+            URL farmclient = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_client.txt");
+            URL farmserver = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_server_details.txt");
+            
+            File ffarmjpg = new File(home + "\\.minecrunch\\resources\\farming.jpg");
+            File ffarmclient = new File(home + "\\.minecrunch\\resources\\farming_client.txt");
+            File ffarmserver = new File(home + "\\.minecrunch\\resources\\farming_server_details.txt");
+            
+            FileUtils.copyURLToFile(farmjpg, ffarmjpg);
+            FileUtils.copyURLToFile(farmclient, ffarmclient);
+            FileUtils.copyURLToFile(farmserver, ffarmserver);
+        }
+        
+        // Linux
+        if (os.contains("Linux")) {
+            URL farmjpg = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming.jpg");
+            URL farmclient = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_client.txt");
+            URL farmserver = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_server_details.txt");
+            
+            File ffarmjpg = new File(home + "/.minecrunch/resources/farming.jpg");
+            File ffarmclient = new File(home + "/.minecrunch/resources/farming_client.txt");
+            File ffarmserver = new File(home + "/.minecrunch/resources/farming_server_details.txt");
+            
+            FileUtils.copyURLToFile(farmjpg, ffarmjpg);
+            FileUtils.copyURLToFile(farmclient, ffarmclient);
+            FileUtils.copyURLToFile(farmserver, ffarmserver);
+        }
+        
+        // Mac
+        if (os.contains("Mac")) {
+            URL farmjpg = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming.jpg");
+            URL farmclient = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_client.txt");
+            URL farmserver = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_server_details.txt");
+            
+            File ffarmjpg = new File(home + "/.minecrunch/resources/farming.jpg");
+            File ffarmclient = new File(home + "/.minecrunch/resources/farming_client.txt");
+            File ffarmserver = new File(home + "/.minecrunch/resources/farming_server_details.txt");
+            
+            FileUtils.copyURLToFile(farmjpg, ffarmjpg);
+            FileUtils.copyURLToFile(farmclient, ffarmclient);
+            FileUtils.copyURLToFile(farmserver, ffarmserver);
+        }
     }
 
     public void LoadServerTextArea() {
@@ -167,6 +225,51 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
+        
+        if (jComboBox1.getSelectedItem().toString().contains("Minecrunch Farming")) {
+            // Fill TextArea with text from techno_server_details.txt and JLabel with image
+            if (os.contains("Windows")) {
+                File file = new File(home + "\\.minecrunch\\resources\\farming_server_details.txt");
+                ImageIcon imagets = new ImageIcon(home + "\\.minecrunch\\resources\\farming.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea1.read(fileReader, null);
+                    jLabel1.setIcon(imagets);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Linux")) {
+                File file = new File(home + "/.minecrunch/resources/farming_server_details.txt");
+                ImageIcon imagets = new ImageIcon(home + "/.minecrunch/resources/farming.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea1.read(fileReader, null);
+                    jLabel1.setIcon(imagets);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Mac")) {
+                File file = new File(home + "/.minecrunch/resources/farming_server_details.txt");
+                ImageIcon imagets = new ImageIcon(home + "/.minecrunch/resources/farming.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea1.read(fileReader, null);
+                    jLabel1.setIcon(imagets);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     public void InstallServer() {
@@ -178,6 +281,11 @@ public class PackUI extends javax.swing.JFrame {
         if (jComboBox1.getSelectedItem().toString().contains("Techno Color Minecrunch")) {
             // Run techno server thread
             technoserver.start();
+        }
+        
+        if (jComboBox1.getSelectedItem().toString().contains("Minecrunch Farming")) {
+            // Run farming server thread
+            farmingserver.start();
         }
     }
 
@@ -279,6 +387,51 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
+        
+        if (jComboBox2.getSelectedItem().toString().contains("Minecrunch Farming")) {
+            // Fill TextArea with text from techno_client.txt and JLabel with image
+            if (os.contains("Windows")) {
+                File file = new File(home + "\\.minecrunch\\resources\\farming_client.txt");
+                ImageIcon imagetc = new ImageIcon(home + "\\.minecrunch\\resources\\farming.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea4.read(fileReader, null);
+                    jLabel2.setIcon(imagetc);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Linux")) {
+                File file = new File(home + "/.minecrunch/resources/farming_client.txt");
+                ImageIcon imagetc = new ImageIcon(home + "/.minecrunch/resources/farming.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea4.read(fileReader, null);
+                    jLabel2.setIcon(imagetc);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Mac")) {
+                File file = new File(home + "/.minecrunch/resources/farming_client.txt");
+                ImageIcon imagetc = new ImageIcon(home + "/.minecrunch/resources/farming.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea4.read(fileReader, null);
+                    jLabel2.setIcon(imagetc);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     public void InstallClient() {
@@ -290,6 +443,42 @@ public class PackUI extends javax.swing.JFrame {
         if (jComboBox2.getSelectedItem().toString().contains("Techno Color Minecrunch")) {
             // Run techno client thread
             technoclient.start();
+        }
+        
+        if (jComboBox2.getSelectedItem().toString().contains("Minecrunch Farming")) {
+            // Run farming client thread
+            farmingclient.start();
+        }
+    }
+
+    public void LaunchMinecraft() {
+
+        // Windows
+        if (os.contains("Windows")) {
+            try {
+                Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\AppData\\Roaming\\.minecraft\\launcher.jar");
+                System.exit(0);
+            } catch (IOException ex) {
+                Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        // Linux
+        if (os.contains("Linux")) {
+            try {
+                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecraft/launcher.jar");
+                System.exit(0);
+            } catch (IOException ex) {
+                Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        // Mac
+        try {
+            Process proc = Runtime.getRuntime().exec("java -jar " + home + "/Library/Application Support/minecraft/launcher.jar");
+            System.exit(0);
+        } catch (IOException ex) {
+            Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -321,6 +510,7 @@ public class PackUI extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea4 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Minecrunch Modpacks");
@@ -366,7 +556,7 @@ public class PackUI extends javax.swing.JFrame {
         jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Details"));
         jScrollPane1.setViewportView(jTextArea1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Medieval Minecrunch", "Techno Color Minecrunch" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -423,7 +613,7 @@ public class PackUI extends javax.swing.JFrame {
 
         jLabel10.setText("Install Modpack:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Medieval Minecrunch", "Techno Color Minecrunch" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming" }));
         jComboBox2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox2ItemStateChanged(evt);
@@ -485,6 +675,13 @@ public class PackUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Modpacks", jPanel5);
 
+        jButton2.setText("Launch Minecraft");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -493,20 +690,28 @@ public class PackUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTabbedPane1))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton1, jButton2});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton1, jButton2});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -535,8 +740,14 @@ public class PackUI extends javax.swing.JFrame {
         LoadServerTextArea();
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Launch minecraft
+        LaunchMinecraft();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -556,5 +767,4 @@ public class PackUI extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea4;
     // End of variables declaration//GEN-END:variables
-
 }
