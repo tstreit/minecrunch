@@ -1,0 +1,25 @@
+To-Do List
+
+-- Version 2.9
+
+	-- Modpack for 1.10.2 release when mods are decided
+	-- Cyberpunk Minecrunch
+	-- On launching Minecrunch_launcher download res.zip and extract to ~/.minecrunch/resources/
+
+-- Version 3.0
+
+	-- Dynamically add modpacks
+		-- Use text file to pass modpack name throughout the application as variable
+	-- Single installer thread class for client\server installation
+		-- Use variable from the dynamic modpack feature and pass that variable to thread client\server classes
+
+-- Version 3.1
+
+	-- Create mechanism for updating modpacks
+		-- Create version.txt for each modpack and store in ~/.minecrunch/resources/
+			-- Example of modpack version text file: medieval_version.txt
+
+-- Version 3.2
+
+	-- Create server_config_gui.jar to configure and run a server
+		-- To be bundled with server_install.zip in each modpack
