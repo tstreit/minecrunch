@@ -4,7 +4,7 @@ To-Do List
 
 	-- Modpack for 1.10.2 release when mods are decided
 	-- Cyberpunk Minecrunch
-	-- On launching Minecrunch_launcher download res.zip and extract to ~/.minecrunch/resources/
+	-- On launching Minecrunch_launcher download res.zip and extract to ~/.minecrunch/resources/ -- Done
 
 -- Version 3.0
 
@@ -16,8 +16,9 @@ To-Do List
 -- Version 3.1
 
 	-- Create mechanism for updating modpacks
-		-- Create version.txt for each modpack and store in ~/.minecrunch/resources/
-			-- Example of modpack version text file: medieval_version.txt
+		-- Convert version and install configs to xml
+		-- Create version.xml for each modpack and store in ~/.minecrunch/resources/
+			-- Example of modpack version text file: medieval_version.xml
 
 -- Version 3.2
 
