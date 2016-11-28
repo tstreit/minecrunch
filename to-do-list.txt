@@ -5,6 +5,7 @@ To-Do List
 	-- Modpack for 1.10.2 release when mods are decided
 	-- Cyberpunk Minecrunch
 	-- On launching Minecrunch_launcher download res.zip and extract to ~/.minecrunch/resources/ -- Done
+	-- Remove System.exit(0); from LaunchMinecraft method -- Done
 
 -- Version 3.0
 
