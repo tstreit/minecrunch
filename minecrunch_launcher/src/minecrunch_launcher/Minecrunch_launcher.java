@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -23,13 +24,14 @@ public class Minecrunch_launcher {
     /**
      * @param args the command line arguments
      * @throws java.io.IOException
+     * @throws net.lingala.zip4j.exception.ZipException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ZipException {
         MinecraftCheck();
     }
 
     // Check to see if Minecraft is installed.
-    public static void MinecraftCheck() throws IOException {
+    public static void MinecraftCheck() throws IOException, ZipException {
 
         String os = System.getProperty("os.name");
         String home = System.getProperty("user.home");

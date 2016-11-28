@@ -2,12 +2,15 @@ To-Do List
 
 -- Version 2.9
 
-	-- Modpack for 1.10.2 release when mods are decided
-	-- Cyberpunk Minecrunch
 	-- On launching Minecrunch_launcher download res.zip and extract to ~/.minecrunch/resources/ -- Done
 	-- Remove System.exit(0); from LaunchMinecraft method -- Done
-
+	
 -- Version 3.0
+
+	-- Modpack for 1.10.2 release when mods are decided
+	-- Cyberpunk Minecrunch
+
+-- Version 3.1
 
 	-- Dynamically add modpacks
 		-- Convert version and install configs to xml
@@ -15,13 +18,13 @@ To-Do List
 	-- Single installer thread class for client\server installation
 		-- Use variable from the dynamic modpack feature and pass that variable to thread client\server classes
 
--- Version 3.1
+-- Version 3.2
 
 	-- Create mechanism for updating modpacks
 		-- Create version.xml for each modpack and store in ~/.minecrunch/resources/
 			-- Example of modpack version text file: medieval_version.xml
 
--- Version 3.2
+-- Version 3.3
 
 	-- Create server_config_gui.jar to configure and run a server
 		-- To be bundled with server_install.zip in each modpack

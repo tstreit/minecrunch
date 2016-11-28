@@ -34,6 +34,8 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -68,7 +70,7 @@ public class PackUI extends javax.swing.JFrame {
     /**
      * Creates new form PackUI
      */
-    public PackUI() throws IOException {
+    public PackUI() throws IOException, ZipException {
         GetResources();
         initComponents();
         this.setLocationRelativeTo(null);
@@ -79,51 +81,51 @@ public class PackUI extends javax.swing.JFrame {
         System.exit(0);
     }
     
-    public void GetResources() throws MalformedURLException, IOException {
+    public void GetResources() throws MalformedURLException, IOException, ZipException {
         // Download all resources
         // Windows
         if (os.contains("Windows")) {
-            URL farmjpg = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming.jpg");
-            URL farmclient = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_client.txt");
-            URL farmserver = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_server_details.txt");
+            // Download res.zip
+            URL res = new URL("http://www.minecrunch.net/download/res.zip");
+            File fres = new File(home + "\\.minecrunch\\resources\\res.zip");
+            FileUtils.copyURLToFile(res, fres);
             
-            File ffarmjpg = new File(home + "\\.minecrunch\\resources\\farming.jpg");
-            File ffarmclient = new File(home + "\\.minecrunch\\resources\\farming_client.txt");
-            File ffarmserver = new File(home + "\\.minecrunch\\resources\\farming_server_details.txt");
+            // Unzip file to .minecrunch/resources directory
+            ZipFile reszip = new ZipFile(home + "\\.minecrunch\\resources\\res.zip");
+            reszip.extractAll(home + "\\.minecrunch\\resources");
             
-            FileUtils.copyURLToFile(farmjpg, ffarmjpg);
-            FileUtils.copyURLToFile(farmclient, ffarmclient);
-            FileUtils.copyURLToFile(farmserver, ffarmserver);
+            // delete res.zip file
+            fres.delete();
         }
         
         // Linux
         if (os.contains("Linux")) {
-            URL farmjpg = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming.jpg");
-            URL farmclient = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_client.txt");
-            URL farmserver = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_server_details.txt");
+            // Download res.zip
+            URL res = new URL("http://www.minecrunch.net/download/res.zip");
+            File fres = new File(home + "/.minecrunch/resources/res.zip");
+            FileUtils.copyURLToFile(res, fres);
             
-            File ffarmjpg = new File(home + "/.minecrunch/resources/farming.jpg");
-            File ffarmclient = new File(home + "/.minecrunch/resources/farming_client.txt");
-            File ffarmserver = new File(home + "/.minecrunch/resources/farming_server_details.txt");
+            // Unzip file to .minecrunch/resources directory
+            ZipFile reszip = new ZipFile(home + "/.minecrunch/resources/res.zip");
+            reszip.extractAll(home + "/.minecrunch/resources");
             
-            FileUtils.copyURLToFile(farmjpg, ffarmjpg);
-            FileUtils.copyURLToFile(farmclient, ffarmclient);
-            FileUtils.copyURLToFile(farmserver, ffarmserver);
+            // delete res.zip file
+            fres.delete();
         }
         
         // Mac
         if (os.contains("Mac")) {
-            URL farmjpg = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming.jpg");
-            URL farmclient = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_client.txt");
-            URL farmserver = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/farming_server_details.txt");
+            // Download res.zip
+            URL res = new URL("http://www.minecrunch.net/download/res.zip");
+            File fres = new File(home + "/.minecrunch/resources/res.zip");
+            FileUtils.copyURLToFile(res, fres);
             
-            File ffarmjpg = new File(home + "/.minecrunch/resources/farming.jpg");
-            File ffarmclient = new File(home + "/.minecrunch/resources/farming_client.txt");
-            File ffarmserver = new File(home + "/.minecrunch/resources/farming_server_details.txt");
+            // Unzip file to .minecrunch/resources directory
+            ZipFile reszip = new ZipFile(home + "/.minecrunch/resources/res.zip");
+            reszip.extractAll(home + "/.minecrunch/resources");
             
-            FileUtils.copyURLToFile(farmjpg, ffarmjpg);
-            FileUtils.copyURLToFile(farmclient, ffarmclient);
-            FileUtils.copyURLToFile(farmserver, ffarmserver);
+            // delete res.zip file
+            fres.delete();
         }
     }
 
@@ -457,7 +459,6 @@ public class PackUI extends javax.swing.JFrame {
         if (os.contains("Windows")) {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\AppData\\Roaming\\.minecraft\\launcher.jar");
-                System.exit(0);
             } catch (IOException ex) {
                 Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -467,7 +468,6 @@ public class PackUI extends javax.swing.JFrame {
         if (os.contains("Linux")) {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecraft/launcher.jar");
-                System.exit(0);
             } catch (IOException ex) {
                 Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -476,7 +476,6 @@ public class PackUI extends javax.swing.JFrame {
         // Mac
         try {
             Process proc = Runtime.getRuntime().exec("java -jar " + home + "/Library/Application Support/minecraft/launcher.jar");
-            System.exit(0);
         } catch (IOException ex) {
             Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -720,6 +719,11 @@ public class PackUI extends javax.swing.JFrame {
         Exit();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Launch minecraft
+        LaunchMinecraft();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // Install client button
         InstallClient();
@@ -739,11 +743,6 @@ public class PackUI extends javax.swing.JFrame {
         // Load server text area
         LoadServerTextArea();
     }//GEN-LAST:event_jComboBox1ItemStateChanged
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Launch minecraft
-        LaunchMinecraft();
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
