@@ -5,6 +5,10 @@ To-Do List
 	-- On launching Minecrunch_launcher download res.zip and extract to ~/.minecrunch/resources/ -- Done
 	-- Remove System.exit(0); from LaunchMinecraft method -- Done
 	
+-- Version 2.9.1
+
+	-- Added back in System.ext(0); to LaunchMinecraft method -- Done
+	
 -- Version 3.0
 
 	-- Modpack for 1.10.2 release when mods are decided

@@ -69,7 +69,6 @@ public class Minecrunch_launcher {
 
                     try {
                         Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\.minecrunch\\Minecraft.jar");
-                        System.exit(0);
                     } catch (IOException ex) {
                         Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -116,7 +115,6 @@ public class Minecrunch_launcher {
 
                     try {
                         Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/Minecraft.jar");
-                        System.exit(0);
                     } catch (IOException ex) {
                         Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -163,7 +161,6 @@ public class Minecrunch_launcher {
 
                     try {
                         Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/Minecraft.jar");
-                        System.exit(0);
                     } catch (IOException ex) {
                         Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
                     }

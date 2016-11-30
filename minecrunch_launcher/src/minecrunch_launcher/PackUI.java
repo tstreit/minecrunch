@@ -60,7 +60,7 @@ public class PackUI extends javax.swing.JFrame {
 
     TechnoServer ts = new TechnoServer();
     Thread technoserver = new Thread(ts);
-    
+
     FarmingClient fc = new FarmingClient();
     Thread farmingclient = new Thread(fc);
 
@@ -80,7 +80,7 @@ public class PackUI extends javax.swing.JFrame {
     public void Exit() {
         System.exit(0);
     }
-    
+
     public void GetResources() throws MalformedURLException, IOException, ZipException {
         // Download all resources
         // Windows
@@ -89,41 +89,41 @@ public class PackUI extends javax.swing.JFrame {
             URL res = new URL("http://www.minecrunch.net/download/res.zip");
             File fres = new File(home + "\\.minecrunch\\resources\\res.zip");
             FileUtils.copyURLToFile(res, fres);
-            
+
             // Unzip file to .minecrunch/resources directory
             ZipFile reszip = new ZipFile(home + "\\.minecrunch\\resources\\res.zip");
             reszip.extractAll(home + "\\.minecrunch\\resources");
-            
+
             // delete res.zip file
             fres.delete();
         }
-        
+
         // Linux
         if (os.contains("Linux")) {
             // Download res.zip
             URL res = new URL("http://www.minecrunch.net/download/res.zip");
             File fres = new File(home + "/.minecrunch/resources/res.zip");
             FileUtils.copyURLToFile(res, fres);
-            
+
             // Unzip file to .minecrunch/resources directory
             ZipFile reszip = new ZipFile(home + "/.minecrunch/resources/res.zip");
             reszip.extractAll(home + "/.minecrunch/resources");
-            
+
             // delete res.zip file
             fres.delete();
         }
-        
+
         // Mac
         if (os.contains("Mac")) {
             // Download res.zip
             URL res = new URL("http://www.minecrunch.net/download/res.zip");
             File fres = new File(home + "/.minecrunch/resources/res.zip");
             FileUtils.copyURLToFile(res, fres);
-            
+
             // Unzip file to .minecrunch/resources directory
             ZipFile reszip = new ZipFile(home + "/.minecrunch/resources/res.zip");
             reszip.extractAll(home + "/.minecrunch/resources");
-            
+
             // delete res.zip file
             fres.delete();
         }
@@ -227,7 +227,7 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         if (jComboBox1.getSelectedItem().toString().contains("Minecrunch Farming")) {
             // Fill TextArea with text from techno_server_details.txt and JLabel with image
             if (os.contains("Windows")) {
@@ -284,7 +284,7 @@ public class PackUI extends javax.swing.JFrame {
             // Run techno server thread
             technoserver.start();
         }
-        
+
         if (jComboBox1.getSelectedItem().toString().contains("Minecrunch Farming")) {
             // Run farming server thread
             farmingserver.start();
@@ -389,7 +389,7 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         if (jComboBox2.getSelectedItem().toString().contains("Minecrunch Farming")) {
             // Fill TextArea with text from techno_client.txt and JLabel with image
             if (os.contains("Windows")) {
@@ -446,7 +446,7 @@ public class PackUI extends javax.swing.JFrame {
             // Run techno client thread
             technoclient.start();
         }
-        
+
         if (jComboBox2.getSelectedItem().toString().contains("Minecrunch Farming")) {
             // Run farming client thread
             farmingclient.start();
@@ -459,6 +459,7 @@ public class PackUI extends javax.swing.JFrame {
         if (os.contains("Windows")) {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\AppData\\Roaming\\.minecraft\\launcher.jar");
+                System.exit(0);
             } catch (IOException ex) {
                 Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -468,6 +469,7 @@ public class PackUI extends javax.swing.JFrame {
         if (os.contains("Linux")) {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecraft/launcher.jar");
+                System.exit(0);
             } catch (IOException ex) {
                 Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -476,6 +478,7 @@ public class PackUI extends javax.swing.JFrame {
         // Mac
         try {
             Process proc = Runtime.getRuntime().exec("java -jar " + home + "/Library/Application Support/minecraft/launcher.jar");
+            System.exit(0);
         } catch (IOException ex) {
             Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
         }
