@@ -11,8 +11,8 @@ To-Do List
 	
 -- Version 3.0
 
-	-- Modpack for 1.10.2 release when mods are decided
-	-- Cyberpunk Minecrunch
+	-- Modpack for 1.10.2 release when mods are decided -- Done
+	-- Cyberpunk Minecrunch -- Done
 
 -- Version 3.1
 

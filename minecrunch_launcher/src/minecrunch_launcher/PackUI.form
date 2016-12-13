@@ -209,11 +209,12 @@
             <Component class="javax.swing.JComboBox" name="jComboBox1">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
+                  <StringArray count="5">
                     <StringItem index="0" value=""/>
                     <StringItem index="1" value="Medieval Minecrunch"/>
                     <StringItem index="2" value="Techno Color Minecrunch"/>
                     <StringItem index="3" value="Minecrunch Farming"/>
+                    <StringItem index="4" value="Cyberpunk Minecrunch"/>
                   </StringArray>
                 </Property>
               </Properties>
@@ -304,11 +305,12 @@
             <Component class="javax.swing.JComboBox" name="jComboBox2">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
+                  <StringArray count="5">
                     <StringItem index="0" value=""/>
                     <StringItem index="1" value="Medieval Minecrunch"/>
                     <StringItem index="2" value="Techno Color Minecrunch"/>
                     <StringItem index="3" value="Minecrunch Farming"/>
+                    <StringItem index="4" value="Cyberpunk Minecrunch"/>
                   </StringArray>
                 </Property>
               </Properties>

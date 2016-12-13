@@ -67,6 +67,12 @@ public class PackUI extends javax.swing.JFrame {
     FarmingServer fs = new FarmingServer();
     Thread farmingserver = new Thread(fs);
 
+    CyberpunkClient cc = new CyberpunkClient();
+    Thread cyberpunkclient = new Thread(cc);
+
+    CyberpunkServer cs = new CyberpunkServer();
+    Thread cyberpunkserver = new Thread(cs);
+
     /**
      * Creates new form PackUI
      */
@@ -272,6 +278,51 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
+        
+        if (jComboBox1.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
+            // Fill TextArea with text from techno_server_details.txt and JLabel with image
+            if (os.contains("Windows")) {
+                File file = new File(home + "\\.minecrunch\\resources\\cyberpunk_server_details.txt");
+                ImageIcon imagets = new ImageIcon(home + "\\.minecrunch\\resources\\cyberpunk.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea1.read(fileReader, null);
+                    jLabel1.setIcon(imagets);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Linux")) {
+                File file = new File(home + "/.minecrunch/resources/cyberpunk_server_details.txt");
+                ImageIcon imagets = new ImageIcon(home + "/.minecrunch/resources/cyberpunk.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea1.read(fileReader, null);
+                    jLabel1.setIcon(imagets);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Mac")) {
+                File file = new File(home + "/.minecrunch/resources/cyberpunk_server_details.txt");
+                ImageIcon imagets = new ImageIcon(home + "/.minecrunch/resources/cyberpunk.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea1.read(fileReader, null);
+                    jLabel1.setIcon(imagets);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     public void InstallServer() {
@@ -288,6 +339,11 @@ public class PackUI extends javax.swing.JFrame {
         if (jComboBox1.getSelectedItem().toString().contains("Minecrunch Farming")) {
             // Run farming server thread
             farmingserver.start();
+        }
+        
+        if (jComboBox1.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
+            // Run farming server thread
+            cyberpunkserver.start();
         }
     }
 
@@ -434,6 +490,51 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
+        
+        if (jComboBox2.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
+            // Fill TextArea with text from techno_client.txt and JLabel with image
+            if (os.contains("Windows")) {
+                File file = new File(home + "\\.minecrunch\\resources\\cyberpunk_client.txt");
+                ImageIcon imagetc = new ImageIcon(home + "\\.minecrunch\\resources\\cyberpunk.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea4.read(fileReader, null);
+                    jLabel2.setIcon(imagetc);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Linux")) {
+                File file = new File(home + "/.minecrunch/resources/cyberpunk_client.txt");
+                ImageIcon imagetc = new ImageIcon(home + "/.minecrunch/resources/cyberpunk.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea4.read(fileReader, null);
+                    jLabel2.setIcon(imagetc);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            if (os.contains("Mac")) {
+                File file = new File(home + "/.minecrunch/resources/cyberpunk_client.txt");
+                ImageIcon imagetc = new ImageIcon(home + "/.minecrunch/resources/cyberpunk.jpg");
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    jTextArea4.read(fileReader, null);
+                    jLabel2.setIcon(imagetc);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     public void InstallClient() {
@@ -450,6 +551,11 @@ public class PackUI extends javax.swing.JFrame {
         if (jComboBox2.getSelectedItem().toString().contains("Minecrunch Farming")) {
             // Run farming client thread
             farmingclient.start();
+        }
+        
+        if (jComboBox2.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
+            // Run farming client thread
+            cyberpunkclient.start();
         }
     }
 
@@ -558,7 +664,7 @@ public class PackUI extends javax.swing.JFrame {
         jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Details"));
         jScrollPane1.setViewportView(jTextArea1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming", "Cyberpunk Minecrunch" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -615,7 +721,7 @@ public class PackUI extends javax.swing.JFrame {
 
         jLabel10.setText("Install Modpack:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming", "Cyberpunk Minecrunch" }));
         jComboBox2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox2ItemStateChanged(evt);
