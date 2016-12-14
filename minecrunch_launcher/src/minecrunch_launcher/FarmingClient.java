@@ -131,6 +131,15 @@ public class FarmingClient implements Runnable {
                 System.out.println(ex);
             }
             newopt.delete();
+            
+            File newser = new File(home + "\\AppData\\temp\\client\\servers.dat");
+            File oldser = new File(home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\farming\\servers.dat");
+            try {
+                FileUtils.copyFile(newser, oldser);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            newser.delete();
 
             try {
                 // delete temporary directory
@@ -263,6 +272,15 @@ public class FarmingClient implements Runnable {
                 System.out.println(ex);
             }
             newopt.delete();
+            
+            File newser = new File(home + "/temp/client/servers.dat");
+            File oldser = new File(home + "/.minecraft/minecrunch/farming/servers.dat");
+            try {
+                FileUtils.copyFile(newser, oldser);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            newser.delete();
 
             try {
                 // delete temporary directory
@@ -397,6 +415,15 @@ public class FarmingClient implements Runnable {
                 System.out.println(ex);
             }
             newopt.delete();
+            
+            File newser = new File(home + "/temp/client/servers.dat");
+            File oldser = new File(home + "/Library/Application Support/minecraft/minecrunch/farming/servers.dat");
+            try {
+                FileUtils.copyFile(newser, oldser);
+            } catch (IOException ex) {
+                System.out.println(ex);
+            }
+            newser.delete();
 
             try {
                 // delete temporary directory
