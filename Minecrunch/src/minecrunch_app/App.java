@@ -130,8 +130,8 @@ public class App {
 
         if (os.contains("Linux")) {
             File minecrunchDir = new File(home + "/.minecrunch");
-            File libDir = new File(home + ".minecrunch/lib");
-            File resDir = new File(home + ".minecrunch/resources");
+            File libDir = new File(home + "/.minecrunch/lib");
+            File resDir = new File(home + "/.minecrunch/resources");
 
             if (minecrunchDir.exists()) {
                 Update();
@@ -198,8 +198,8 @@ public class App {
 
         if (os.contains("Mac")) {
             File minecrunchDir = new File(home + "/.minecrunch");
-            File libDir = new File(home + ".minecrunch/lib");
-            File resDir = new File(home + ".minecrunch/resources");
+            File libDir = new File(home + "/.minecrunch/lib");
+            File resDir = new File(home + "/.minecrunch/resources");
 
             if (minecrunchDir.exists()) {
                 Update();

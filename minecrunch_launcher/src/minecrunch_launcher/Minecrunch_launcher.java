@@ -60,7 +60,7 @@ public class Minecrunch_launcher {
 
                 if (n == JOptionPane.YES_OPTION) {
                     // If yes, download and run Minecraft.jar
-                    URL mine = new URL("http://www.minecrunch.net/download/minecrunch_installer/Minecraft.jar");
+                    URL mine = new URL("http://s3.amazonaws.com/Minecraft.Download/launcher/Minecraft.jar");
                     File fmine = new File(home + "\\.minecrunch\\Minecraft.jar");
                     FileUtils.copyURLToFile(mine, fmine);
 
