@@ -34,9 +34,22 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -75,10 +88,13 @@ public class PackUI extends javax.swing.JFrame {
 
     /**
      * Creates new form PackUI
+     * @throws java.io.IOException
+     * @throws net.lingala.zip4j.exception.ZipException
      */
     public PackUI() throws IOException, ZipException {
         GetResources();
         initComponents();
+        ReadXML();
         this.setLocationRelativeTo(null);
     }
 
@@ -135,6 +151,93 @@ public class PackUI extends javax.swing.JFrame {
         }
     }
 
+    public void ReadXML() {
+        try {
+            if (os.contains("Windows")) {
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(home + "\\.minecrunch\\resources\\modpacks.xml");
+            //creating an XPathFactory:
+            XPathFactory factory = XPathFactory.newInstance();
+            //using this factory to create an XPath object:
+            XPath xpath = factory.newXPath();
+            
+            // XPath Query for showing all nodes value
+            XPathExpression expr = xpath.compile("modpacks");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            for (int i = 0; i < nodes.getLength(); i++) {
+                
+                Element el = (Element) nodes.item(i);
+                NodeList children = el.getChildNodes();
+                for (int k = 0; k < children.getLength(); k++) {
+                    Node child = children.item(k);
+                    if (child.getNodeType() != Node.TEXT_NODE) {
+                        jComboBox1.addItem(child.getTextContent());
+                        jComboBox2.addItem(child.getTextContent());
+                    }
+                }
+            }
+            }
+            
+            if (os.contains("Linux")) {
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
+            //creating an XPathFactory:
+            XPathFactory factory = XPathFactory.newInstance();
+            //using this factory to create an XPath object:
+            XPath xpath = factory.newXPath();
+            
+            // XPath Query for showing all nodes value
+            XPathExpression expr = xpath.compile("modpacks");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            for (int i = 0; i < nodes.getLength(); i++) {
+                
+                Element el = (Element) nodes.item(i);
+                NodeList children = el.getChildNodes();
+                for (int k = 0; k < children.getLength(); k++) {
+                    Node child = children.item(k);
+                    if (child.getNodeType() != Node.TEXT_NODE) {
+                        jComboBox1.addItem(child.getTextContent());
+                        jComboBox2.addItem(child.getTextContent());
+                    }
+                }
+            }
+            }
+            
+            if (os.contains("Mac")) {
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
+            //creating an XPathFactory:
+            XPathFactory factory = XPathFactory.newInstance();
+            //using this factory to create an XPath object:
+            XPath xpath = factory.newXPath();
+            
+            // XPath Query for showing all nodes value
+            XPathExpression expr = xpath.compile("modpacks");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            for (int i = 0; i < nodes.getLength(); i++) {
+                
+                Element el = (Element) nodes.item(i);
+                NodeList children = el.getChildNodes();
+                for (int k = 0; k < children.getLength(); k++) {
+                    Node child = children.item(k);
+                    if (child.getNodeType() != Node.TEXT_NODE) {
+                        jComboBox1.addItem(child.getTextContent());
+                        jComboBox2.addItem(child.getTextContent());
+                    }
+                }
+            }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException ex) {
+            Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void LoadServerTextArea() {
         if (jComboBox1.getSelectedItem().toString().contains("")) {
             // Fill TextArea with nothing....nothing at all
@@ -153,10 +256,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagems);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -167,10 +274,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagems);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -181,10 +292,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagems);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -198,10 +313,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -212,10 +331,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -226,10 +349,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -243,10 +370,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -257,10 +388,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -271,14 +406,18 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        
+
         if (jComboBox1.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
             // Fill TextArea with text from techno_server_details.txt and JLabel with image
             if (os.contains("Windows")) {
@@ -288,10 +427,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -302,10 +445,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -316,10 +463,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea1.read(fileReader, null);
                     jLabel1.setIcon(imagets);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -340,7 +491,7 @@ public class PackUI extends javax.swing.JFrame {
             // Run farming server thread
             farmingserver.start();
         }
-        
+
         if (jComboBox1.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
             // Run farming server thread
             cyberpunkserver.start();
@@ -365,10 +516,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagemc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -379,10 +534,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagemc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -393,10 +552,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagemc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -410,10 +573,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -424,10 +591,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -438,10 +609,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -455,10 +630,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -469,10 +648,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -483,14 +666,18 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        
+
         if (jComboBox2.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
             // Fill TextArea with text from techno_client.txt and JLabel with image
             if (os.contains("Windows")) {
@@ -500,10 +687,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -514,10 +705,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -528,10 +723,14 @@ public class PackUI extends javax.swing.JFrame {
                     FileReader fileReader = new FileReader(file);
                     jTextArea4.read(fileReader, null);
                     jLabel2.setIcon(imagetc);
+
                 } catch (FileNotFoundException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PackUI.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -552,7 +751,7 @@ public class PackUI extends javax.swing.JFrame {
             // Run farming client thread
             farmingclient.start();
         }
-        
+
         if (jComboBox2.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
             // Run farming client thread
             cyberpunkclient.start();
@@ -566,8 +765,10 @@ public class PackUI extends javax.swing.JFrame {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\AppData\\Roaming\\.minecraft\\launcher.jar");
                 System.exit(0);
+
             } catch (IOException ex) {
-                Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Minecrunch_launcher.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -576,8 +777,10 @@ public class PackUI extends javax.swing.JFrame {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecraft/launcher.jar");
                 System.exit(0);
+
             } catch (IOException ex) {
-                Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Minecrunch_launcher.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -585,8 +788,10 @@ public class PackUI extends javax.swing.JFrame {
         try {
             Process proc = Runtime.getRuntime().exec("java -jar " + home + "/Library/Application Support/minecraft/launcher.jar");
             System.exit(0);
+
         } catch (IOException ex) {
-            Logger.getLogger(Minecrunch_launcher.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Minecrunch_launcher.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -603,7 +808,7 @@ public class PackUI extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane("http://www.minecrunch.net/news.html");
+        jEditorPane1 = new javax.swing.JEditorPane("http://www.minecrunch.net/download/news.html");
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -664,7 +869,6 @@ public class PackUI extends javax.swing.JFrame {
         jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder("Server Details"));
         jScrollPane1.setViewportView(jTextArea1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming", "Cyberpunk Minecrunch" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -721,7 +925,6 @@ public class PackUI extends javax.swing.JFrame {
 
         jLabel10.setText("Install Modpack:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "", "Medieval Minecrunch", "Techno Color Minecrunch", "Minecrunch Farming", "Cyberpunk Minecrunch" }));
         jComboBox2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox2ItemStateChanged(evt);
@@ -838,20 +1041,20 @@ public class PackUI extends javax.swing.JFrame {
         InstallClient();
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
-        // Load client text area
-        LoadModpackTextArea();
-    }//GEN-LAST:event_jComboBox2ItemStateChanged
-
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // Install server button
         InstallServer();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        // Load server text area
+        // Load the server text area with stuff
         LoadServerTextArea();
     }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+        // Load the modpack text area with stuff
+        LoadModpackTextArea();
+    }//GEN-LAST:event_jComboBox2ItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
