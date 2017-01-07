@@ -177,30 +177,18 @@ public class Minecrunch_updater {
             URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
             URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
             URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
-            URL res1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/medieval_client.txt");
-            URL res2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/medieval_server_details.txt");
-            URL res3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno_client.txt");
-            URL res4 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno_server_details.txt");
             URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
             URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
             File flib1 = new File(home + "\\.minecrunch\\lib\\commons-io-2.4.jar");
             File flib2 = new File(home + "\\.minecrunch\\lib\\json-simple-1.1.1.jar");
             File flib3 = new File(home + "\\.minecrunch\\lib\\zip4j_1.3.2.jar");
-            File fres1 = new File(home + "\\.minecrunch\\resources\\medieval_client.txt");
-            File fres2 = new File(home + "\\.minecrunch\\resources\\medieval_server_details.txt");
-            File fres3 = new File(home + "\\.minecrunch\\resources\\techno_client.txt");
-            File fres4 = new File(home + "\\.minecrunch\\resources\\techno_server_details.txt");
             File fjar1 = new File(home + "\\.minecrunch\\minecrunch_launcher.jar");
             File fver1 = new File(home + "\\.minecrunch\\resources\\version.txt");
 
             FileUtils.copyURLToFile(lib1, flib1);
             FileUtils.copyURLToFile(lib2, flib2);
             FileUtils.copyURLToFile(lib3, flib3);
-            FileUtils.copyURLToFile(res1, fres1);
-            FileUtils.copyURLToFile(res2, fres2);
-            FileUtils.copyURLToFile(res3, fres3);
-            FileUtils.copyURLToFile(res4, fres4);
             FileUtils.copyURLToFile(jar1, fjar1);
             FileUtils.copyURLToFile(ver1, fver1);
 
@@ -220,30 +208,18 @@ public class Minecrunch_updater {
             URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
             URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
             URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
-            URL res1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/medieval_client.txt");
-            URL res2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/medieval_server_details.txt");
-            URL res3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno_client.txt");
-            URL res4 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno_server_details.txt");
             URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
             URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
             File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
             File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
             File flib3 = new File(home + "/.minecrunch/lib/zip4j_1.3.2.jar");
-            File fres1 = new File(home + "/.minecrunch/resources/medieval_client.txt");
-            File fres2 = new File(home + "/.minecrunch/resources/medieval_server_details.txt");
-            File fres3 = new File(home + "/.minecrunch/resources/techno_client.txt");
-            File fres4 = new File(home + "/.minecrunch/resources/techno_server_details.txt");
             File fjar1 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
             File fver1 = new File(home + "/.minecrunch/resources/version.txt");
 
             FileUtils.copyURLToFile(lib1, flib1);
             FileUtils.copyURLToFile(lib2, flib2);
             FileUtils.copyURLToFile(lib3, flib3);
-            FileUtils.copyURLToFile(res1, fres1);
-            FileUtils.copyURLToFile(res2, fres2);
-            FileUtils.copyURLToFile(res3, fres3);
-            FileUtils.copyURLToFile(res4, fres4);
             FileUtils.copyURLToFile(jar1, fjar1);
             FileUtils.copyURLToFile(ver1, fver1);
 
@@ -263,30 +239,18 @@ public class Minecrunch_updater {
             URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
             URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
             URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
-            URL res1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/medieval_client.txt");
-            URL res2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/medieval_server_details.txt");
-            URL res3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno_client.txt");
-            URL res4 = new URL("http://www.minecrunch.net/download/minecrunch_installer/resources/techno_server_details.txt");
             URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
             URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
             File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
             File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
             File flib3 = new File(home + "/.minecrunch/lib/zip4j_1.3.2.jar");
-            File fres1 = new File(home + "/.minecrunch/resources/medieval_client.txt");
-            File fres2 = new File(home + "/.minecrunch/resources/medieval_server_details.txt");
-            File fres3 = new File(home + "/.minecrunch/resources/techno_client.txt");
-            File fres4 = new File(home + "/.minecrunch/resources/techno_server_details.txt");
             File fjar1 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
             File fver1 = new File(home + "/.minecrunch/resources/version.txt");
 
             FileUtils.copyURLToFile(lib1, flib1);
             FileUtils.copyURLToFile(lib2, flib2);
             FileUtils.copyURLToFile(lib3, flib3);
-            FileUtils.copyURLToFile(res1, fres1);
-            FileUtils.copyURLToFile(res2, fres2);
-            FileUtils.copyURLToFile(res3, fres3);
-            FileUtils.copyURLToFile(res4, fres4);
             FileUtils.copyURLToFile(jar1, fjar1);
             FileUtils.copyURLToFile(ver1, fver1);
 
