@@ -11,12 +11,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -30,13 +41,85 @@ public class Client implements Runnable {
     String name;
     String gamename;
     String version;
+    String java;
 
     Client(Object n, Object m) {
         name = n.toString();
         gamename = m.toString();
     }
 
+    public void Modprofile() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+        // Windows
+        if (os.contains("Windows")) {
+            // Reading selected modpack profile and getting parameters
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(home + "\\.minecrunch\\resources\\" + name + "_profile.xml");
+            doc.getDocumentElement().normalize();
+
+            NodeList nodes = doc.getElementsByTagName("profile");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
+                    Element element = (Element) node;
+                    version = element.getElementsByTagName("version").item(0).getTextContent();
+                    System.out.println("Forge version: " + version);
+                    java = element.getElementsByTagName("java").item(0).getTextContent();
+                    System.out.println("JVM Argument: " + java);
+                }
+            }
+        }
+
+        // Linux
+        if (os.contains("Linux")) {
+            // Reading selected modpack profile and getting parameters
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(home + "/.minecrunch/resources/" + name + "_profile.xml");
+            doc.getDocumentElement().normalize();
+
+            NodeList nodes = doc.getElementsByTagName("profile");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
+                    Element element = (Element) node;
+                    version = element.getElementsByTagName("version").item(0).getTextContent();
+                    System.out.println("Forge version: " + version);
+                    java = element.getElementsByTagName("java").item(0).getTextContent();
+                    System.out.println("JVM Argument: " + java);
+                }
+            }
+        }
+        // Mac
+        if (os.contains("Mac")) {
+            // Reading selected modpack profile and getting parameters
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(home + "/.minecrunch/resources/" + name + "_profile.xml");
+            doc.getDocumentElement().normalize();
+
+            NodeList nodes = doc.getElementsByTagName("profile");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
+                    Element element = (Element) node;
+                    version = element.getElementsByTagName("version").item(0).getTextContent();
+                    System.out.println("Forge version: " + version);
+                    java = element.getElementsByTagName("java").item(0).getTextContent();
+                    System.out.println("JVM Argument: " + java);
+                }
+            }
+        }
+    }
+
     public void run() {
+        // Reading modpack profile XML file and getting profile parameters
+        try {
+            Modprofile();
+        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         // Install selected modpack
         // Windows
         if (os.contains("Windows")) {
@@ -112,14 +195,8 @@ public class Client implements Runnable {
 
             // Setup profile
             String profile = gamename;
-            if (name.contains("cyberpunk")) {
-                version = "1.10.2-forge1.10.2-12.18.3.2185";
-            } else {
-                version = "1.7.10-Forge10.13.4.1558-1.7.10";
-            }
             String gamedir = home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\" + name;
             String filePath = home + "\\AppData\\Roaming\\.minecraft\\launcher_profiles.json";
-            String java = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
             JSONParser parser = new JSONParser();
             Object obj = null;
             try {
@@ -226,14 +303,8 @@ public class Client implements Runnable {
 
             // Setup profile
             String profile = gamename;
-            if (name.contains("cyberpunk")) {
-                version = "1.10.2-forge1.10.2-12.18.3.2185";
-            } else {
-                version = "1.7.10-Forge10.13.4.1558-1.7.10";
-            }
             String gamedir = home + "/.minecraft/minecrunch/" + name;
             String filePath = home + "/.minecraft/launcher_profiles.json";
-            String java = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
             JSONParser parser = new JSONParser();
             Object obj = null;
             try {
@@ -340,14 +411,8 @@ public class Client implements Runnable {
 
             // Setup profile
             String profile = gamename;
-            if (name.contains("cyberpunk")) {
-                version = "1.10.2-forge1.10.2-12.18.3.2185";
-            } else {
-                version = "1.7.10-Forge10.13.4.1558-1.7.10";
-            }
             String gamedir = home + "/Library/Application Support/minecraft/minecrunch/" + name;
             String filePath = home + "/Library/Application Support/minecraft/launcher_profiles.json";
-            String java = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
             JSONParser parser = new JSONParser();
             Object obj = null;
             try {
