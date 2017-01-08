@@ -72,7 +72,6 @@ public class Minecrunch_updater {
                     } else {
                         // If user chooses no then just run the minecrunch_launcher jar file
                         Run();
-
                     }
                 }
             } catch (IOException ex) {
@@ -113,7 +112,6 @@ public class Minecrunch_updater {
                     } else {
                         // If user chooses no then just run the minecrunch_launcher jar file
                         Run();
-
                     }
                 }
             } catch (IOException ex) {
@@ -154,7 +152,6 @@ public class Minecrunch_updater {
                     } else {
                         // If user chooses no then just run the minecrunch_launcher jar file
                         Run();
-
                     }
                 }
             } catch (IOException ex) {
@@ -178,19 +175,16 @@ public class Minecrunch_updater {
             URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
             URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
             URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
-            URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
             File flib1 = new File(home + "\\.minecrunch\\lib\\commons-io-2.4.jar");
             File flib2 = new File(home + "\\.minecrunch\\lib\\json-simple-1.1.1.jar");
             File flib3 = new File(home + "\\.minecrunch\\lib\\zip4j_1.3.2.jar");
             File fjar1 = new File(home + "\\.minecrunch\\minecrunch_launcher.jar");
-            File fver1 = new File(home + "\\.minecrunch\\resources\\version.txt");
 
             FileUtils.copyURLToFile(lib1, flib1);
             FileUtils.copyURLToFile(lib2, flib2);
             FileUtils.copyURLToFile(lib3, flib3);
             FileUtils.copyURLToFile(jar1, fjar1);
-            FileUtils.copyURLToFile(ver1, fver1);
 
             Component frame = null;
             JOptionPane.showMessageDialog(frame, "Update complete.");
@@ -209,19 +203,16 @@ public class Minecrunch_updater {
             URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
             URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
             URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
-            URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
             File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
             File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
             File flib3 = new File(home + "/.minecrunch/lib/zip4j_1.3.2.jar");
             File fjar1 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
-            File fver1 = new File(home + "/.minecrunch/resources/version.txt");
 
             FileUtils.copyURLToFile(lib1, flib1);
             FileUtils.copyURLToFile(lib2, flib2);
             FileUtils.copyURLToFile(lib3, flib3);
             FileUtils.copyURLToFile(jar1, fjar1);
-            FileUtils.copyURLToFile(ver1, fver1);
 
             Component frame = null;
             JOptionPane.showMessageDialog(frame, "Update complete.");
@@ -240,19 +231,16 @@ public class Minecrunch_updater {
             URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
             URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
             URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
-            URL ver1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/version.txt");
 
             File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
             File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
             File flib3 = new File(home + "/.minecrunch/lib/zip4j_1.3.2.jar");
             File fjar1 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
-            File fver1 = new File(home + "/.minecrunch/resources/version.txt");
 
             FileUtils.copyURLToFile(lib1, flib1);
             FileUtils.copyURLToFile(lib2, flib2);
             FileUtils.copyURLToFile(lib3, flib3);
             FileUtils.copyURLToFile(jar1, fjar1);
-            FileUtils.copyURLToFile(ver1, fver1);
 
             Component frame = null;
             JOptionPane.showMessageDialog(frame, "Update complete.");

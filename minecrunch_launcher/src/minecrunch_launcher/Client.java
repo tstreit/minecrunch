@@ -1,27 +1,7 @@
 /*
- * Copyright (c) 2016, tstreit
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * * Redistributions of source code must retain the above copyright notice, this
- *   list of conditions and the following disclaimer.
- * * Redistributions in binary form must reproduce the above copyright notice,
- *   this list of conditions and the following disclaimer in the documentation
- *   and/or other materials provided with the distribution.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package minecrunch_launcher;
 
@@ -42,17 +22,27 @@ import org.json.simple.parser.ParseException;
  *
  * @author tstreit
  */
-public class CyberpunkClient implements Runnable {
+public class Client implements Runnable {
 
     String os = System.getProperty("os.name");
     String home = System.getProperty("user.home");
     WaitDialog wd = new WaitDialog();
+    String name;
+    String gamename;
+    String version;
+
+    Client(Object n, Object m) {
+        name = n.toString();
+        gamename = m.toString();
+    }
 
     public void run() {
-        wd.setVisible(true);
-        // If Windows
+        // Install selected modpack
+        // Windows
         if (os.contains("Windows")) {
-            // create temporary directory
+            wd.setVisible(true);
+            System.out.println("Modpack picked: " + name);
+            System.out.println("Gamename is: " + gamename);
             File dir = new File(home + "\\AppData\\temp");
             if (!dir.exists()) {
                 if (dir.mkdir()) {
@@ -63,10 +53,9 @@ public class CyberpunkClient implements Runnable {
                     System.out.println(console);
                 }
             }
-            // download file from server
             URL url = null;
             try {
-                url = new URL("http://www.minecrunch.net/download/cyberpunk/client_install.zip");
+                url = new URL("http://www.minecrunch.net/download/" + name + "/client_install.zip");
             } catch (MalformedURLException ex) {
                 System.out.println(ex);
             }
@@ -76,70 +65,43 @@ public class CyberpunkClient implements Runnable {
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            // unzip file in users home folder and extract it to temp
             try {
                 ZipFile zipFile = new ZipFile(home + "\\AppData\\temp\\client_install.zip");
                 zipFile.extractAll(home + "\\AppData\\temp");
             } catch (ZipException e) {
             }
-
-            // clean up and delete zip file that was downloaded
             file.delete();
 
-            // move folders and files to .minecraft directory
-            File newlib = new File(home + "\\AppData\\temp\\client\\libraries");
+            File newlib = new File(home + "\\AppData\\temp\\client_install\\libraries");
             File oldlib = new File(home + "\\AppData\\Roaming\\.minecraft\\libraries");
             try {
                 FileUtils.copyDirectory(newlib, oldlib);
+                System.out.println("Copied libraries directory.");
+                FileUtils.deleteDirectory(newlib);
+                System.out.println("Deleted libraries directory.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newlib.delete();
 
-            File newmods = new File(home + "\\AppData\\temp\\client\\mods");
-            File oldmods = new File(home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\cyberpunk\\mods");
-            try {
-                FileUtils.copyDirectory(newmods, oldmods);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newmods.delete();
-
-            File newres = new File(home + "\\AppData\\temp\\client\\resourcepacks");
-            File oldres = new File(home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\cyberpunk\\resourcepacks");
-            try {
-                FileUtils.copyDirectory(newres, oldres);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newres.delete();
-            
-            File newver = new File(home + "\\AppData\\temp\\client\\versions");
+            File newver = new File(home + "\\AppData\\temp\\client_install\\versions");
             File oldver = new File(home + "\\AppData\\Roaming\\.minecraft\\versions");
             try {
                 FileUtils.copyDirectory(newver, oldver);
+                System.out.println("Copied version directory.");
+                FileUtils.deleteDirectory(newver);
+                System.out.println("Deleted version directory.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newver.delete();
 
-            File newopt = new File(home + "\\AppData\\temp\\client\\options.txt");
-            File oldopt = new File(home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\cyberpunk\\options.txt");
+            File newmods = new File(home + "\\AppData\\temp\\client_install\\");
+            File oldmods = new File(home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\" + name + "\\");
             try {
-                FileUtils.copyFile(newopt, oldopt);
+                FileUtils.copyDirectory(newmods, oldmods);
+                System.out.println("Copied all other directories.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newopt.delete();
-            
-            File newser = new File(home + "\\AppData\\temp\\client\\servers.dat");
-            File oldser = new File(home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\cyberpunk\\servers.dat");
-            try {
-                FileUtils.copyFile(newser, oldser);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newser.delete();
 
             try {
                 // delete temporary directory
@@ -148,13 +110,16 @@ public class CyberpunkClient implements Runnable {
                 System.out.println(ex);
             }
 
-            // edit .minecraft/launcher_profiles.json
-            String profile = "Cyberpunk Minecrunch";
-            String version = "1.10.2-forge1.10.2-12.18.3.2185";
-            String javaargs = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
-            String gamedir = home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\cyberpunk";
+            // Setup profile
+            String profile = gamename;
+            if (name.contains("cyberpunk")) {
+                version = "1.10.2-forge1.10.2-12.18.3.2185";
+            } else {
+                version = "1.7.10-Forge10.13.4.1558-1.7.10";
+            }
+            String gamedir = home + "\\AppData\\Roaming\\.minecraft\\minecrunch\\" + name;
             String filePath = home + "\\AppData\\Roaming\\.minecraft\\launcher_profiles.json";
-
+            String java = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
             JSONParser parser = new JSONParser();
             Object obj = null;
             try {
@@ -163,26 +128,21 @@ public class CyberpunkClient implements Runnable {
                 System.out.println(ex);
             }
             JSONObject jsonObject = (JSONObject) obj;
-
             JSONObject profiles = (JSONObject) jsonObject.get("profiles");
             String selectedProfile = profile;
             String clientToken = (String) jsonObject.get("clientToken");
             JSONObject authenticationDatabase = (JSONObject) jsonObject.get("authenticationDatabase");
-
             JSONObject params = new JSONObject();
-
             params.put("name", profile);
             params.put("gameDir", gamedir);
             params.put("lastVersionId", version);
-            params.put("javaArgs", javaargs);
+            params.put("javaArgs", java);
             profiles.put(profile, params);
-
             JSONObject update = new JSONObject();
             update.put("profiles", profiles);
             update.put("selectedProfile", selectedProfile);
             update.put("clientToken", clientToken);
             update.put("authenticationDatabase", authenticationDatabase);
-
             try (FileWriter newfile = new FileWriter(filePath)) {
                 newfile.write(update.toJSONString());
                 newfile.flush();
@@ -192,21 +152,24 @@ public class CyberpunkClient implements Runnable {
             wd.setVisible(false);
         }
 
-        // If Linux
+        // Linux
         if (os.contains("Linux")) {
-            // create temporary directory
+            wd.setVisible(true);
+            System.out.println("Modpack picked: " + name);
+            System.out.println("Gamename is: " + gamename);
             File dir = new File(home + "/temp");
             if (!dir.exists()) {
                 if (dir.mkdir()) {
-                    System.out.println("Directory created.");
+                    String console = "Temporary directory created.";
+                    System.out.println(console);
                 } else {
-                    System.out.println("Directory already exists.");
+                    String console = "Temporary directory already exists.";
+                    System.out.println(console);
                 }
             }
-            // download file from server
             URL url = null;
             try {
-                url = new URL("http://www.minecrunch.net/download/cyberpunk/client_install.zip");
+                url = new URL("http://www.minecrunch.net/download/" + name + "/client_install.zip");
             } catch (MalformedURLException ex) {
                 System.out.println(ex);
             }
@@ -216,71 +179,43 @@ public class CyberpunkClient implements Runnable {
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            // unzip file in users home folder and extract it to temp
             try {
                 ZipFile zipFile = new ZipFile(home + "/temp/client_install.zip");
                 zipFile.extractAll(home + "/temp");
             } catch (ZipException e) {
-                e.printStackTrace();
             }
-
-            // clean up and delete zip file that was downloaded
             file.delete();
 
-            // move folders and files to .minecraft directory
             File newlib = new File(home + "/temp/client/libraries");
             File oldlib = new File(home + "/.minecraft/libraries");
             try {
                 FileUtils.copyDirectory(newlib, oldlib);
+                System.out.println("Copied libraries directory.");
+                FileUtils.deleteDirectory(newlib);
+                System.out.println("Deleted libraries directory.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newlib.delete();
-
-            File newmods = new File(home + "/temp/client/mods");
-            File oldmods = new File(home + "/.minecraft/minecrunch/cyberpunk/mods");
-            try {
-                FileUtils.copyDirectory(newmods, oldmods);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newmods.delete();
-
-            File newres = new File(home + "/temp/client/resourcepacks");
-            File oldres = new File(home + "/.minecraft/minecrunch/cyberpunk/resourcepacks");
-            try {
-                FileUtils.copyDirectory(newres, oldres);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newres.delete();
 
             File newver = new File(home + "/temp/client/versions");
             File oldver = new File(home + "/.minecraft/versions");
             try {
                 FileUtils.copyDirectory(newver, oldver);
+                System.out.println("Copied version directory.");
+                FileUtils.deleteDirectory(newver);
+                System.out.println("Deleted version directory.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newver.delete();
 
-            File newopt = new File(home + "/temp/client/options.txt");
-            File oldopt = new File(home + "/.minecraft//minecrunch/cyberpunk/options.txt");
+            File newmods = new File(home + "/temp/client/");
+            File oldmods = new File(home + "/.minecraft/minecrunch/" + name + "/");
             try {
-                FileUtils.copyFile(newopt, oldopt);
+                FileUtils.copyDirectory(newmods, oldmods);
+                System.out.println("Copied all other directories.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newopt.delete();
-            
-            File newser = new File(home + "/temp/client/servers.dat");
-            File oldser = new File(home + "/.minecraft/minecrunch/cyberpunk/servers.dat");
-            try {
-                FileUtils.copyFile(newser, oldser);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newser.delete();
 
             try {
                 // delete temporary directory
@@ -289,43 +224,39 @@ public class CyberpunkClient implements Runnable {
                 System.out.println(ex);
             }
 
-            // edit .minecraft/launcher_profiles.json
-            String profile = "Cyberpunk Minecrunch";
-            String version = "1.10.2-forge1.10.2-12.18.3.2185";
-            String javaargs = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
-            String gamedir = home + "/.minecraft/minecrunch/cyberpunk";
+            // Setup profile
+            String profile = gamename;
+            if (name.contains("cyberpunk")) {
+                version = "1.10.2-forge1.10.2-12.18.3.2185";
+            } else {
+                version = "1.7.10-Forge10.13.4.1558-1.7.10";
+            }
+            String gamedir = home + "/.minecraft/minecrunch/" + name;
             String filePath = home + "/.minecraft/launcher_profiles.json";
-
+            String java = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
             JSONParser parser = new JSONParser();
             Object obj = null;
             try {
                 obj = parser.parse(new FileReader(filePath));
-            } catch (IOException ex) {
-                System.out.println(ex);
-            } catch (ParseException ex) {
+            } catch (IOException | ParseException ex) {
                 System.out.println(ex);
             }
             JSONObject jsonObject = (JSONObject) obj;
-
             JSONObject profiles = (JSONObject) jsonObject.get("profiles");
             String selectedProfile = profile;
             String clientToken = (String) jsonObject.get("clientToken");
             JSONObject authenticationDatabase = (JSONObject) jsonObject.get("authenticationDatabase");
-
             JSONObject params = new JSONObject();
-
             params.put("name", profile);
             params.put("gameDir", gamedir);
             params.put("lastVersionId", version);
-            params.put("javaArgs", javaargs);
+            params.put("javaArgs", java);
             profiles.put(profile, params);
-
             JSONObject update = new JSONObject();
             update.put("profiles", profiles);
             update.put("selectedProfile", selectedProfile);
             update.put("clientToken", clientToken);
             update.put("authenticationDatabase", authenticationDatabase);
-
             try (FileWriter newfile = new FileWriter(filePath)) {
                 newfile.write(update.toJSONString());
                 newfile.flush();
@@ -335,21 +266,24 @@ public class CyberpunkClient implements Runnable {
             wd.setVisible(false);
         }
 
-        // If Mac
+        // Mac
         if (os.contains("Mac")) {
-            // create temporary directory
+            wd.setVisible(true);
+            System.out.println("Modpack picked: " + name);
+            System.out.println("Gamename is: " + gamename);
             File dir = new File(home + "/temp");
             if (!dir.exists()) {
                 if (dir.mkdir()) {
-                    System.out.println("Directory created.");
+                    String console = "Temporary directory created.";
+                    System.out.println(console);
                 } else {
-                    System.out.println("Directory already exists.");
+                    String console = "Temporary directory already exists.";
+                    System.out.println(console);
                 }
             }
-            // download file from server
             URL url = null;
             try {
-                url = new URL("http://www.minecrunch.net/download/cyberpunk/client_install.zip");
+                url = new URL("http://www.minecrunch.net/download/" + name + "/client_install.zip");
             } catch (MalformedURLException ex) {
                 System.out.println(ex);
             }
@@ -359,71 +293,43 @@ public class CyberpunkClient implements Runnable {
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            // unzip file in users home folder and extract it to temp
             try {
                 ZipFile zipFile = new ZipFile(home + "/temp/client_install.zip");
                 zipFile.extractAll(home + "/temp");
             } catch (ZipException e) {
-                e.printStackTrace();
             }
-
-            // clean up and delete zip file that was downloaded
             file.delete();
 
-            // move folders and files to .minecraft directory
             File newlib = new File(home + "/temp/client/libraries");
             File oldlib = new File(home + "/Library/Application Support/minecraft/libraries");
             try {
                 FileUtils.copyDirectory(newlib, oldlib);
+                System.out.println("Copied libraries directory.");
+                FileUtils.deleteDirectory(newlib);
+                System.out.println("Deleted libraries directory.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newlib.delete();
-
-            File newmods = new File(home + "/temp/client/mods");
-            File oldmods = new File(home + "/Library/Application Support/minecraft/minecrunch/cyberpunk/mods");
-            try {
-                FileUtils.copyDirectory(newmods, oldmods);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newmods.delete();
-
-            File newres = new File(home + "/temp/client/resourcepacks");
-            File oldres = new File(home + "/Library/Application Support/minecraft/minecrunch/cyberpunk/resourcepacks");
-            try {
-                FileUtils.copyDirectory(newres, oldres);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newres.delete();
 
             File newver = new File(home + "/temp/client/versions");
             File oldver = new File(home + "/Library/Application Support/minecraft/versions");
             try {
                 FileUtils.copyDirectory(newver, oldver);
+                System.out.println("Copied version directory.");
+                FileUtils.deleteDirectory(newver);
+                System.out.println("Deleted version directory.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newver.delete();
 
-            File newopt = new File(home + "/temp/client/options.txt");
-            File oldopt = new File(home + "/Library/Application Support/minecraft/minecrunch/cyberpunk/options.txt");
+            File newmods = new File(home + "/temp/client/");
+            File oldmods = new File(home + "/Library/Application Support/minecraft/minecrunch/" + name + "/");
             try {
-                FileUtils.copyFile(newopt, oldopt);
+                FileUtils.copyDirectory(newmods, oldmods);
+                System.out.println("Copied all other directories.");
             } catch (IOException ex) {
                 System.out.println(ex);
             }
-            newopt.delete();
-            
-            File newser = new File(home + "/temp/client/servers.dat");
-            File oldser = new File(home + "/Library/Application Support/minecraft/minecrunch/cyberpunk/servers.dat");
-            try {
-                FileUtils.copyFile(newser, oldser);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            newser.delete();
 
             try {
                 // delete temporary directory
@@ -432,43 +338,39 @@ public class CyberpunkClient implements Runnable {
                 System.out.println(ex);
             }
 
-            // edit .minecraft/launcher_profiles.json
-            String profile = "Cyberpunk Minecrunch";
-            String version = "1.10.2-forge1.10.2-12.18.3.2185";
-            String javaargs = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
-            String gamedir = home + "/Library/Application Support/minecraft/minecrunch/cyberpunk";
+            // Setup profile
+            String profile = gamename;
+            if (name.contains("cyberpunk")) {
+                version = "1.10.2-forge1.10.2-12.18.3.2185";
+            } else {
+                version = "1.7.10-Forge10.13.4.1558-1.7.10";
+            }
+            String gamedir = home + "/Library/Application Support/minecraft/minecrunch/" + name;
             String filePath = home + "/Library/Application Support/minecraft/launcher_profiles.json";
-
+            String java = "-Xmx4G -XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:-UseAdaptiveSizePolicy -Xmn128M";
             JSONParser parser = new JSONParser();
             Object obj = null;
             try {
                 obj = parser.parse(new FileReader(filePath));
-            } catch (IOException ex) {
-                System.out.println(ex);
-            } catch (ParseException ex) {
+            } catch (IOException | ParseException ex) {
                 System.out.println(ex);
             }
             JSONObject jsonObject = (JSONObject) obj;
-
             JSONObject profiles = (JSONObject) jsonObject.get("profiles");
             String selectedProfile = profile;
             String clientToken = (String) jsonObject.get("clientToken");
             JSONObject authenticationDatabase = (JSONObject) jsonObject.get("authenticationDatabase");
-
             JSONObject params = new JSONObject();
-
             params.put("name", profile);
             params.put("gameDir", gamedir);
             params.put("lastVersionId", version);
-            params.put("javaArgs", javaargs);
+            params.put("javaArgs", java);
             profiles.put(profile, params);
-
             JSONObject update = new JSONObject();
             update.put("profiles", profiles);
             update.put("selectedProfile", selectedProfile);
             update.put("clientToken", clientToken);
             update.put("authenticationDatabase", authenticationDatabase);
-
             try (FileWriter newfile = new FileWriter(filePath)) {
                 newfile.write(update.toJSONString());
                 newfile.flush();

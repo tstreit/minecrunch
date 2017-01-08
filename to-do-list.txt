@@ -16,15 +16,15 @@ To-Do List
 
 -- Version 3.1
 
-	-- Dynamically add modpacks
-		-- Convert version and install configs to xml - Removed due to complexity
+	-- Dynamically add modpacks -Done
 		-- Use xml file to pass modpack name throughout the application as variable - Done
-	-- Single installer thread class for client\server installation
-		-- Use variable from the dynamic modpack feature and pass that variable to thread client\server classes
+	-- Single installer thread class for client\server installation - Done
+		-- Use variable from the dynamic modpack feature and pass that variable to thread client\server classes - Done
 
 -- Version 3.2
 
 	-- Create mechanism for updating modpacks
+		-- Convert version and install configs to xml
 		-- Create version.xml for each modpack and store in ~/.minecrunch/resources/
 			-- Example of modpack version text file: medieval_version.xml
 

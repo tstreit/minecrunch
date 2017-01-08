@@ -55,38 +55,13 @@ import org.xml.sax.SAXException;
  */
 public class PackUI extends javax.swing.JFrame {
 
-    // Get system properties
-    String os = System.getProperty("os.name");
-    String home = System.getProperty("user.home");
-
-    // Define threads
-    MedievalClient mc = new MedievalClient();
-    Thread medievalclient = new Thread(mc);
-
-    MedievalServer ms = new MedievalServer();
-    Thread medievalserver = new Thread(ms);
-
-    TechnoClient tc = new TechnoClient();
-    Thread technoclient = new Thread(tc);
-
-    TechnoServer ts = new TechnoServer();
-    Thread technoserver = new Thread(ts);
-
-    FarmingClient fc = new FarmingClient();
-    Thread farmingclient = new Thread(fc);
-
-    FarmingServer fs = new FarmingServer();
-    Thread farmingserver = new Thread(fs);
-
-    CyberpunkClient cc = new CyberpunkClient();
-    Thread cyberpunkclient = new Thread(cc);
-
-    CyberpunkServer cs = new CyberpunkServer();
-    Thread cyberpunkserver = new Thread(cs);
-
     // Define global variables
     String name;
     String selected;
+
+    // Get system properties
+    String os = System.getProperty("os.name");
+    String home = System.getProperty("user.home");
 
     /**
      * Creates new form PackUI
@@ -184,7 +159,7 @@ public class PackUI extends javax.swing.JFrame {
                     }
                 }
             }
-            
+
             // Linux
             if (os.contains("Linux")) {
                 DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
@@ -212,7 +187,7 @@ public class PackUI extends javax.swing.JFrame {
                     }
                 }
             }
-            
+
             // Mac
             if (os.contains("Mac")) {
                 DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
@@ -269,7 +244,7 @@ public class PackUI extends javax.swing.JFrame {
             }
             LoadClientDetails();
         }
-        
+
         // Linux
         if (os.contains("Linux")) {
             // Read modpacks.xml and compare child node content to string provided by jCombox2
@@ -290,7 +265,7 @@ public class PackUI extends javax.swing.JFrame {
             }
             LoadClientDetails();
         }
-         // Mac
+        // Mac
         if (os.contains("Mac")) {
             // Read modpacks.xml and compare child node content to string provided by jCombox2
             DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
@@ -356,7 +331,7 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         // Linux
         if (os.contains("Linux")) {
             // Set label and textarea to nothing
@@ -400,7 +375,7 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         // Mac
         if (os.contains("Mac")) {
             // Set label and textarea to nothing
@@ -449,7 +424,7 @@ public class PackUI extends javax.swing.JFrame {
     public void GetServerNode() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         // Get selected modpack name from jComboBox1
         selected = jComboBox1.getSelectedItem().toString();
-        
+
         // Windows
         if (os.contains("Windows")) {
             // Read modpacks.xml and compare child node content to string provided by jCombox2
@@ -470,7 +445,7 @@ public class PackUI extends javax.swing.JFrame {
             }
             LoadServerDetails();
         }
-        
+
         // Linux
         if (os.contains("Linux")) {
             // Read modpacks.xml and compare child node content to string provided by jCombox2
@@ -491,7 +466,7 @@ public class PackUI extends javax.swing.JFrame {
             }
             LoadServerDetails();
         }
-        
+
         // Mac
         if (os.contains("Mac")) {
             // Read modpacks.xml and compare child node content to string provided by jCombox2
@@ -558,7 +533,7 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         // Linux
         if (os.contains("Linux")) {
             // Set label and textarea to nothing
@@ -602,7 +577,7 @@ public class PackUI extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         // Mac
         if (os.contains("Mac")) {
             // Set label and textarea to nothing
@@ -649,47 +624,18 @@ public class PackUI extends javax.swing.JFrame {
     }
 
     public void InstallServer() {
-        if (jComboBox1.getSelectedItem().toString().contains("Medieval Minecrunch")) {
-            // Run medieval server thread
-            medievalserver.start();
-        }
-
-        if (jComboBox1.getSelectedItem().toString().contains("Techno Color Minecrunch")) {
-            // Run techno server thread
-            technoserver.start();
-        }
-
-        if (jComboBox1.getSelectedItem().toString().contains("Minecrunch Farming")) {
-            // Run farming server thread
-            farmingserver.start();
-        }
-
-        if (jComboBox1.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
-            // Run farming server thread
-            cyberpunkserver.start();
-        }
+        Object n = name;
+        Server se = new Server(n);
+        Thread server = new Thread(se);
+        server.start();
     }
 
     public void InstallClient() {
-        if (jComboBox2.getSelectedItem().toString().contains("Medieval Minecrunch")) {
-            // Run medieval client thread
-            medievalclient.start();
-        }
-
-        if (jComboBox2.getSelectedItem().toString().contains("Techno Color Minecrunch")) {
-            // Run techno client thread
-            technoclient.start();
-        }
-
-        if (jComboBox2.getSelectedItem().toString().contains("Minecrunch Farming")) {
-            // Run farming client thread
-            farmingclient.start();
-        }
-
-        if (jComboBox2.getSelectedItem().toString().contains("Cyberpunk Minecrunch")) {
-            // Run farming client thread
-            cyberpunkclient.start();
-        }
+            Object n = name;
+            Object m = jComboBox2.getSelectedItem().toString();
+            Client cl = new Client(n, m);
+            Thread client = new Thread(cl);
+            client.start();
     }
 
     public void LaunchMinecraft() {
