@@ -28,6 +28,7 @@ package minecrunch_app;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -42,14 +43,19 @@ import org.apache.commons.io.FileUtils;
 public class App {
 
     public static void main(String[] args) throws InterruptedException {
-
-        try {
-            // Run CheckDirectory method
-            CheckDirectory();
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        String c = null;
+        TestInternet ti = new TestInternet(c);
+        if (ti.equals("yes")) {
+            try {
+                // Run CheckDirectory method
+                CheckDirectory();
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Run();
         }
     }
 
@@ -88,7 +94,7 @@ public class App {
                 File flib3 = new File(home + "\\.minecrunch\\lib\\zip4j_1.3.2.jar");
                 File fjar1 = new File(home + "\\.minecrunch\\minecrunch_updater.jar");
                 File fjar2 = new File(home + "\\.minecrunch\\minecrunch_launcher.jar");
-                
+
                 FileUtils.copyURLToFile(lib1, flib1);
                 FileUtils.copyURLToFile(lib2, flib2);
                 FileUtils.copyURLToFile(lib3, flib3);
@@ -228,6 +234,37 @@ public class App {
         if (os.contains("Mac")) {
             try {
                 Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_updater.jar");
+            } catch (IOException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public static void Run() {
+        // Get system properties
+        String os = System.getProperty("os.name");
+        String home = System.getProperty("user.home");
+
+        // Run minecrunch_launcher jar
+        if (os.contains("Windows")) {
+            try {
+                Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\.minecrunch\\minecrunch_launcher.jar");
+            } catch (IOException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (os.contains("Linux")) {
+            try {
+                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_launcher.jar");
+            } catch (IOException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (os.contains("Mac")) {
+            try {
+                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_launcher.jar");
             } catch (IOException ex) {
                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }

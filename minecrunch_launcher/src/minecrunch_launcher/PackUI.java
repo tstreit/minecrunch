@@ -27,6 +27,7 @@ package minecrunch_launcher;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -58,6 +59,7 @@ public class PackUI extends javax.swing.JFrame {
     // Define global variables
     String name;
     String selected;
+    String connected;
 
     // Get system properties
     String os = System.getProperty("os.name");
@@ -70,15 +72,42 @@ public class PackUI extends javax.swing.JFrame {
      * @throws net.lingala.zip4j.exception.ZipException
      */
     public PackUI() throws IOException, ZipException {
-        GetResources();
-        initComponents();
-        PopulateComboBoxes();
-        this.setLocationRelativeTo(null);
+        // First test for internet connection and decide if connected or not
+        TestInternet();
+        if ("yes".equals(connected)) {
+            GetResources();
+            initComponents();
+            PopulateComboBoxes();
+            GetNews();
+            this.setLocationRelativeTo(null);
+        } else {
+            System.out.println("Minecrunch is not connected.");
+            initComponents();
+            PopulateComboBoxes();
+            GetNews();
+            this.setLocationRelativeTo(null);
+        }
     }
 
     // Exit application
     public void Exit() {
         System.exit(0);
+    }
+
+    public void TestInternet() {
+        // Test for internet connection.
+        try {
+            InetAddress address = InetAddress.getByName("www.minecrunch.net");
+            if (address.isReachable(2000)) {
+                System.out.println("Minecrunch is connected.");
+                connected = "yes";
+            } else {
+                throw new Exception("Ping timeout (2000ms)");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public void GetResources() throws MalformedURLException, IOException, ZipException {
@@ -126,6 +155,42 @@ public class PackUI extends javax.swing.JFrame {
 
             // delete res.zip file
             fres.delete();
+        }
+    }
+    
+    public void GetNews() {
+        // Read news.html file into jEditorPane1
+        // Windows
+        if (os.contains("Windows")) {
+            jEditorPane1.setContentType("Text/html");
+            File file = new File(home + "\\.minecrunch\\resources\\news.html");
+            try {
+                jEditorPane1.setPage(file.toURI().toURL());
+            } catch (IOException ex) {
+                Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        // Linux
+        if (os.contains("Linux")) {
+            jEditorPane1.setContentType("Text/html");
+            File file = new File(home + "/.minecrunch/resources/news.html");
+            try {
+                jEditorPane1.setPage(file.toURI().toURL());
+            } catch (IOException ex) {
+                Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        // Mac
+        if (os.contains("Mac")) {
+            jEditorPane1.setContentType("Text/html");
+            File file = new File(home + "/.minecrunch/resources/news.html");
+            try {
+                jEditorPane1.setPage(file.toURI().toURL());
+            } catch (IOException ex) {
+                Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -631,11 +696,11 @@ public class PackUI extends javax.swing.JFrame {
     }
 
     public void InstallClient() {
-            Object n = name;
-            Object m = jComboBox2.getSelectedItem().toString();
-            Client cl = new Client(n, m);
-            Thread client = new Thread(cl);
-            client.start();
+        Object n = name;
+        Object m = jComboBox2.getSelectedItem().toString();
+        Client cl = new Client(n, m);
+        Thread client = new Thread(cl);
+        client.start();
     }
 
     public void LaunchMinecraft() {
@@ -682,13 +747,13 @@ public class PackUI extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() throws IOException {
+    private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane("http://www.minecrunch.net/download/news.html");
+        jEditorPane1 = new javax.swing.JEditorPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -717,6 +782,7 @@ public class PackUI extends javax.swing.JFrame {
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.RIGHT);
 
+        jEditorPane1.setEditable(false);
         jEditorPane1.setBorder(null);
         jScrollPane3.setViewportView(jEditorPane1);
 
@@ -771,11 +837,11 @@ public class PackUI extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox1, 0, 270, Short.MAX_VALUE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -792,9 +858,9 @@ public class PackUI extends javax.swing.JFrame {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(13, 13, 13)
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(29, 29, 29))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
@@ -835,16 +901,16 @@ public class PackUI extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jComboBox2, 0, 256, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -856,9 +922,9 @@ public class PackUI extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(13, 13, 13)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
                 .addContainerGap())
