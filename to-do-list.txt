@@ -20,6 +20,7 @@ To-Do List
 		-- Use xml file to pass modpack name throughout the application as variable -- Done
 	-- Single installer thread class for client\server installation -- Done
 		-- Use variable from the dynamic modpack feature and pass that variable to thread client\server classes -- Done
+	-- Test to see if you can connect to minecrunch.net -- Done
 
 -- Version 3.2
 
