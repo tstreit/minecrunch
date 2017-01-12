@@ -45,7 +45,7 @@ public class App {
     public static void main(String[] args) throws InterruptedException {
         String c = null;
         TestInternet ti = new TestInternet(c);
-        if (ti.equals("yes")) {
+        if (ti.connected == "yes") {
             try {
                 // Run CheckDirectory method
                 CheckDirectory();

@@ -263,7 +263,7 @@ public class Client implements Runnable {
             }
             file.delete();
 
-            File newlib = new File(home + "/temp/client/libraries");
+            File newlib = new File(home + "/temp/client_install/libraries");
             File oldlib = new File(home + "/.minecraft/libraries");
             try {
                 FileUtils.copyDirectory(newlib, oldlib);
@@ -274,7 +274,7 @@ public class Client implements Runnable {
                 System.out.println(ex);
             }
 
-            File newver = new File(home + "/temp/client/versions");
+            File newver = new File(home + "/temp/client_install/versions");
             File oldver = new File(home + "/.minecraft/versions");
             try {
                 FileUtils.copyDirectory(newver, oldver);
@@ -285,7 +285,7 @@ public class Client implements Runnable {
                 System.out.println(ex);
             }
 
-            File newmods = new File(home + "/temp/client/");
+            File newmods = new File(home + "/temp/client_install/");
             File oldmods = new File(home + "/.minecraft/minecrunch/" + name + "/");
             try {
                 FileUtils.copyDirectory(newmods, oldmods);
@@ -382,7 +382,7 @@ public class Client implements Runnable {
                 System.out.println(ex);
             }
 
-            File newver = new File(home + "/temp/client/versions");
+            File newver = new File(home + "/temp/client_install/versions");
             File oldver = new File(home + "/Library/Application Support/minecraft/versions");
             try {
                 FileUtils.copyDirectory(newver, oldver);
@@ -393,7 +393,7 @@ public class Client implements Runnable {
                 System.out.println(ex);
             }
 
-            File newmods = new File(home + "/temp/client/");
+            File newmods = new File(home + "/temp/client_install/");
             File oldmods = new File(home + "/Library/Application Support/minecraft/minecrunch/" + name + "/");
             try {
                 FileUtils.copyDirectory(newmods, oldmods);

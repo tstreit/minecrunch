@@ -104,7 +104,6 @@ public class PackUI extends javax.swing.JFrame {
             } else {
                 throw new Exception("Ping timeout (2000ms)");
             }
-
         } catch (Exception e) {
             System.out.println(e);
         }
