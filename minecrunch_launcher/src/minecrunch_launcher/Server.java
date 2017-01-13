@@ -127,7 +127,7 @@ public class Server implements Runnable {
         // If Mac
         if (os.contains("Mac")) {
             // create directory in users home folder server
-            File dir = new File(home + "/minecrunch" + name + "_server");
+            File dir = new File(home + "/minecrunch/" + name + "_server");
             if (!dir.exists()) {
                 if (dir.mkdir()) {
                     System.out.println("Directory created.");
