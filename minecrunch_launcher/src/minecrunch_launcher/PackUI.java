@@ -73,45 +73,15 @@ public class PackUI extends javax.swing.JFrame {
      * @throws net.lingala.zip4j.exception.ZipException
      */
     public PackUI() throws IOException, ZipException {
-        // First test for internet connection and decide if connected or not
-        if (Utility.HasConnectivity()) {
-            GetResources();
-            initComponents();
-            PopulateComboBoxes();
-            GetNews();
-            this.setLocationRelativeTo(null);
-        } else {
-            System.out.println("Minecrunch is not connected.");
-            initComponents();
-            PopulateComboBoxes();
-            GetNews();
-            this.setLocationRelativeTo(null);
-        }
+        initComponents();
+        PopulateComboBoxes();
+        GetNews();
+        this.setLocationRelativeTo(null);
     }
 
     // Exit application
     public void Exit() {
         System.exit(0);
-    }
-
-    public void GetResources() throws MalformedURLException, IOException, ZipException {
-        // Download all resources
-        if (os.contains("Windows")) {
-            minecrunchDir = home + "\\.minecrunch\\resources\\";
-        } else {
-            minecrunchDir = home + "/.minecrunch/resources/";
-        }
-        // Download res.zip
-        URL res = new URL("http://www.minecrunch.net/download/res.zip");
-        File fres = new File(minecrunchDir + "res.zip");
-        FileUtils.copyURLToFile(res, fres);
-
-        // Unzip file to .minecrunch/resources directory
-        ZipFile reszip = new ZipFile(minecrunchDir + "res.zip");
-        reszip.extractAll(minecrunchDir);
-
-        // delete res.zip file
-        fres.delete();
     }
 
     public void GetNews() {
@@ -341,23 +311,23 @@ public class PackUI extends javax.swing.JFrame {
         if (os.contains("Windows")) {
             minecraftDir = home + "\\AppData\\Roaming\\.minecraft\\";
         }
-        
+
         if (os.contains("Linux")) {
-           minecraftDir = home + "/.minecraft/"; 
+            minecraftDir = home + "/.minecraft/";
         }
-        
+
         if (os.contains("Mac")) {
             minecraftDir = home + "/Library/Application Support/minecraft/";
         }
-       
-            try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + minecraftDir + "launcher.jar");
-                System.exit(0);
 
-            } catch (IOException ex) {
-                Logger.getLogger(Minecrunch_launcher.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            Process proc = Runtime.getRuntime().exec("java -jar " + minecraftDir + "launcher.jar");
+            System.exit(0);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Minecrunch_launcher.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
