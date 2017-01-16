@@ -31,22 +31,22 @@ import java.net.InetAddress;
  *
  * @author tstreit
  */
-public class TestInternet {
-    String connected;
+public class Utility {
 
-    TestInternet(String c) {
+    private static final String URL = "www.minecrunch.net";
+    private static final int TIMEOUT = 2000;
+
+    public static boolean HasConnectivity() {
+        boolean isConnected = false;
         // Test for internet connection.
         try {
-            InetAddress address = InetAddress.getByName("www.minecrunch.net");
-            if (address.isReachable(2000)) {
+            InetAddress address = InetAddress.getByName(URL);
+            if (address.isReachable(TIMEOUT)) {
                 System.out.println("Minecrunch is connected.");
-                c = connected = "yes";
-            } else {
-                throw new Exception("Ping timeout (2000ms)");
+                isConnected = true;
             }
-
         } catch (Exception e) {
-            System.out.println(e);
         }
-    }    
+        return isConnected;
+    }
 }

@@ -28,7 +28,6 @@ package minecrunch_app;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -43,9 +42,7 @@ import org.apache.commons.io.FileUtils;
 public class App {
 
     public static void main(String[] args) throws InterruptedException {
-        String c = null;
-        TestInternet ti = new TestInternet(c);
-        if (ti.connected == "yes") {
+        if (Utility.HasConnectivity()) {
             try {
                 // Run CheckDirectory method
                 CheckDirectory();
@@ -64,146 +61,63 @@ public class App {
         // Get system properties
         String os = System.getProperty("os.name");
         String home = System.getProperty("user.home");
+        String dir;
+        String newlib = null;
+        String newres = null;
 
-        // Check for .minecrunch directory if it doesn't exist create main directory, sub-directories, then download libraries and resources 
         if (os.contains("Windows")) {
-            File minecrunchDir = new File(home + "\\.minecrunch");
-            File libDir = new File(home + "\\.minecrunch\\lib");
-            File resDir = new File(home + "\\.minecrunch\\resources");
-
-            if (minecrunchDir.exists()) {
-                Update();
-            } else {
-
-                // Create directory structure
-                minecrunchDir.mkdir();
-                System.out.println("Created: " + minecrunchDir);
-                libDir.mkdir();
-                System.out.println("Created: " + libDir);
-                resDir.mkdir();
-                System.out.println("Created: " + resDir);
-
-                URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
-                URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
-                URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
-                URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
-                URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
-
-                File flib1 = new File(home + "\\.minecrunch\\lib\\commons-io-2.4.jar");
-                File flib2 = new File(home + "\\.minecrunch\\lib\\json-simple-1.1.1.jar");
-                File flib3 = new File(home + "\\.minecrunch\\lib\\zip4j_1.3.2.jar");
-                File fjar1 = new File(home + "\\.minecrunch\\minecrunch_updater.jar");
-                File fjar2 = new File(home + "\\.minecrunch\\minecrunch_launcher.jar");
-
-                FileUtils.copyURLToFile(lib1, flib1);
-                FileUtils.copyURLToFile(lib2, flib2);
-                FileUtils.copyURLToFile(lib3, flib3);
-                FileUtils.copyURLToFile(jar1, fjar1);
-                FileUtils.copyURLToFile(jar2, fjar2);
-
-                Component frame = null;
-                JOptionPane.showMessageDialog(frame, "Install complete.");
-
-                try {
-                    Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\.minecrunch\\minecrunch_launcher.jar");
-                    System.exit(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            dir = home + "\\.minecrunch\\";
+            newlib = dir + "\\lib\\";
+            newres = dir + "\\resources\\";
+        } else {
+            dir = home + "/.minecrunch/";
+            newlib = dir + "/lib/";
+            newres = dir + "/resources/";
         }
 
-        if (os.contains("Linux")) {
-            File minecrunchDir = new File(home + "/.minecrunch");
-            File libDir = new File(home + "/.minecrunch/lib");
-            File resDir = new File(home + "/.minecrunch/resources");
+        // Check for .minecrunch directory if it doesn't exist create main directory, sub-directories, then download libraries and resources
+        File minecrunch = new File(dir);
+        File lib = new File(newlib);
+        File res = new File(newres);
 
-            if (minecrunchDir.exists()) {
-                Update();
-            } else {
+        if (minecrunch.exists()) {
+            Update();
+        } else {
 
-                // Create directory structure
-                minecrunchDir.mkdir();
-                System.out.println("Created: " + minecrunchDir);
-                libDir.mkdir();
-                System.out.println("Created: " + libDir);
-                resDir.mkdir();
-                System.out.println("Created: " + resDir);
+            // Create directory structure
+            minecrunch.mkdir();
+            System.out.println("Created: " + minecrunch);
+            lib.mkdir();
+            System.out.println("Created: " + lib);
+            res.mkdir();
+            System.out.println("Created: " + res);
 
-                URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
-                URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
-                URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
-                URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
-                URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
+            URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
+            URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
+            URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
+            URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
+            URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
 
-                File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
-                File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
-                File flib3 = new File(home + "/.minecrunch/lib/zip4j_1.3.2.jar");
-                File fjar1 = new File(home + "/.minecrunch/minecrunch_updater.jar");
-                File fjar2 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
+            File flib1 = new File(newlib + "commons-io-2.4.jar");
+            File flib2 = new File(newlib + "json-simple-1.1.1.jar");
+            File flib3 = new File(newlib + "zip4j_1.3.2.jar");
+            File fjar1 = new File(dir + "minecrunch_updater.jar");
+            File fjar2 = new File(dir + "minecrunch_launcher.jar");
 
-                FileUtils.copyURLToFile(lib1, flib1);
-                FileUtils.copyURLToFile(lib2, flib2);
-                FileUtils.copyURLToFile(lib3, flib3);
-                FileUtils.copyURLToFile(jar1, fjar1);
-                FileUtils.copyURLToFile(jar2, fjar2);
+            FileUtils.copyURLToFile(lib1, flib1);
+            FileUtils.copyURLToFile(lib2, flib2);
+            FileUtils.copyURLToFile(lib3, flib3);
+            FileUtils.copyURLToFile(jar1, fjar1);
+            FileUtils.copyURLToFile(jar2, fjar2);
 
-                Component frame = null;
-                JOptionPane.showMessageDialog(frame, "Install complete.");
+            Component frame = null;
+            JOptionPane.showMessageDialog(frame, "Install complete.");
 
-                try {
-                    Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_launcher.jar");
-                    System.exit(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-
-        if (os.contains("Mac")) {
-            File minecrunchDir = new File(home + "/.minecrunch");
-            File libDir = new File(home + "/.minecrunch/lib");
-            File resDir = new File(home + "/.minecrunch/resources");
-
-            if (minecrunchDir.exists()) {
-                Update();
-            } else {
-
-                // Create directory structure
-                minecrunchDir.mkdir();
-                System.out.println("Created: " + minecrunchDir);
-                libDir.mkdir();
-                System.out.println("Created: " + libDir);
-                resDir.mkdir();
-                System.out.println("Created: " + resDir);
-
-                URL lib1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/commons-io-2.4.jar");
-                URL lib2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/json-simple-1.1.1.jar");
-                URL lib3 = new URL("http://www.minecrunch.net/download/minecrunch_installer/lib/zip4j_1.3.2.jar");
-                URL jar1 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_updater.jar");
-                URL jar2 = new URL("http://www.minecrunch.net/download/minecrunch_installer/minecrunch_launcher.jar");
-
-                File flib1 = new File(home + "/.minecrunch/lib/commons-io-2.4.jar");
-                File flib2 = new File(home + "/.minecrunch/lib/json-simple-1.1.1.jar");
-                File flib3 = new File(home + "/.minecrunch/lib/zip4j_1.3.2.jar");
-                File fjar1 = new File(home + "/.minecrunch/minecrunch_updater.jar");
-                File fjar2 = new File(home + "/.minecrunch/minecrunch_launcher.jar");
-
-                FileUtils.copyURLToFile(lib1, flib1);
-                FileUtils.copyURLToFile(lib2, flib2);
-                FileUtils.copyURLToFile(lib3, flib3);
-                FileUtils.copyURLToFile(jar1, fjar1);
-                FileUtils.copyURLToFile(jar2, fjar2);
-
-                Component frame = null;
-                JOptionPane.showMessageDialog(frame, "Install complete.");
-
-                try {
-                    Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_launcher.jar");
-                    System.exit(0);
-                } catch (IOException ex) {
-                    Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            try {
+                Process proc = Runtime.getRuntime().exec("java -jar " + dir + "minecrunch_launcher.jar");
+                System.exit(0);
+            } catch (IOException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -213,61 +127,39 @@ public class App {
         // Get system properties
         String os = System.getProperty("os.name");
         String home = System.getProperty("user.home");
+        String dir;
+
+        if (os.contains("Windows")) {
+            dir = home + "\\.minecrunch\\";
+        } else {
+            dir = home + "/.minecrunch/";
+        }
 
         // Run minecrunch_updater jar
-        if (os.contains("Windows")) {
             try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\.minecrunch\\minecrunch_updater.jar");
+                Process proc = Runtime.getRuntime().exec("java -jar " + dir + "minecrunch_updater.jar");
             } catch (IOException ex) {
                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-        if (os.contains("Linux")) {
-            try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_updater.jar");
-            } catch (IOException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        if (os.contains("Mac")) {
-            try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_updater.jar");
-            } catch (IOException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 
     public static void Run() {
         // Get system properties
         String os = System.getProperty("os.name");
         String home = System.getProperty("user.home");
+        String dir;
+
+        if (os.contains("Windows")) {
+            dir = home + "\\.minecrunch\\";
+        } else {
+            dir = home + "/.minecrunch/";
+        }
 
         // Run minecrunch_launcher jar
-        if (os.contains("Windows")) {
             try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\.minecrunch\\minecrunch_launcher.jar");
+                Process proc = Runtime.getRuntime().exec("java -jar " + dir + "minecrunch_launcher.jar");
             } catch (IOException ex) {
                 Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-        if (os.contains("Linux")) {
-            try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_launcher.jar");
-            } catch (IOException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        if (os.contains("Mac")) {
-            try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecrunch/minecrunch_launcher.jar");
-            } catch (IOException ex) {
-                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 }
