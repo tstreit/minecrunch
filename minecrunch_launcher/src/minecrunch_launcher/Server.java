@@ -23,6 +23,7 @@ public class Server implements Runnable {
     String home = System.getProperty("user.home");
     WaitDialog wd = new WaitDialog();
     String name;
+    String minecrunchDir = null;
 
     Server(Object n) {
         name = n.toString();
@@ -30,143 +31,55 @@ public class Server implements Runnable {
 
     public void run() {
         // Install selected server
-        // Windows
-        wd.setVisible(true);
-        // If Windows
         if (os.contains("Windows")) {
-            // create directory in users home folder server
-            File dir = new File(home + "\\minecrunch\\" + name + "_server");
-            if (!dir.exists()) {
-                if (dir.mkdir()) {
-                    String console = "Temporary directory created.";
-                    System.out.println(console);
-                } else {
-                    String console = "Temporary directory already exists.";
-                    System.out.println(console);
-                }
-            }
-            // download file from server
-            URL url = null;
-            try {
-                url = new URL("http://www.minecrunch.net/download/" + name + "/server_install.zip");
-            } catch (MalformedURLException ex) {
-                System.out.println(ex);
-            }
-            File file = new File(home + "\\server_install.zip");
-            try {
-                FileUtils.copyURLToFile(url, file);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
+            minecrunchDir = home + "\\minecrunch\\";
+        } else {
+            minecrunchDir = home + "/minecrunch/";
+        }
+        wd.setVisible(true);
 
-            // unzip file in users home folder and extract it to server
-            try {
-                ZipFile zipFile = new ZipFile(home + "\\server_install.zip");
-                zipFile.extractAll(home + "\\minecrunch\\" + name + "_server");
-            } catch (ZipException e) {
+        // create directory in users home folder server
+        File dir = new File(minecrunchDir + name + "_server");
+        if (!dir.exists()) {
+            if (dir.mkdir()) {
+                String console = "Server directory created.";
+                System.out.println(console);
+            } else {
+                String console = "Server directory already exists.";
+                System.out.println(console);
             }
-            File dir2 = new File(home + "\\minecrunch\\" + name + "_server\\server_install");
-            File dir3 = new File(home + "\\minecrunch\\" + name + "_server");
-            try {
-                FileUtils.copyDirectory(dir2, dir3);
-                FileUtils.deleteDirectory(dir2);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            // clean up and delete zip file that was downloaded
-            file.delete();
-            wd.setVisible(false);
+        }
+        // download file from server
+        URL url = null;
+        try {
+            url = new URL("http://www.minecrunch.net/download/" + name + "/server_install.zip");
+        } catch (MalformedURLException ex) {
+            System.out.println(ex);
+        }
+        File file = new File(minecrunchDir + "server_install.zip");
+        try {
+            FileUtils.copyURLToFile(url, file);
+        } catch (IOException ex) {
+            System.out.println(ex);
         }
 
-        // If Linux
-        if (os.contains("Linux")) {
-            // create directory in users home folder server
-            File dir = new File(home + "/minecrunch/" + name + "_server");
-            if (!dir.exists()) {
-                if (dir.mkdir()) {
-                    System.out.println("Directory created.");
-                } else {
-                    System.out.println("Directory already exists.");
-                }
-            }
-            // download file from server
-            URL url = null;
-            try {
-                url = new URL("http://www.minecrunch.net/download/" + name + "/server_install.zip");
-            } catch (MalformedURLException ex) {
-                System.out.println(ex);
-            }
-            File file = new File(home + "/server_install.zip");
-            try {
-                FileUtils.copyURLToFile(url, file);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            // unzip file in users home folder and extract it to server
-            try {
-                ZipFile zipFile = new ZipFile(home + "/server_install.zip");
-                zipFile.extractAll(home + "/minecrunch/" + name + "_server");
-            } catch (ZipException e) {
-                e.printStackTrace();
-            }
-            File dir2 = new File(home + "/minecrunch/" + name + "_server/server_install");
-            File dir3 = new File(home + "/minecrunch/" + name + "_server");
-            try {
-                FileUtils.copyDirectory(dir2, dir3);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            // clean up and delete zip file that was downloaded
-            file.delete();
-            wd.setVisible(false);
+        // unzip file in users home folder and extract it to server
+        try {
+            ZipFile zipFile = new ZipFile(minecrunchDir + "server_install.zip");
+            zipFile.extractAll(minecrunchDir + name + "_server");
+        } catch (ZipException e) {
+        }
+        File dir2 = new File(minecrunchDir + name + "_server\\server_install");
+        File dir3 = new File(minecrunchDir + name + "_server");
+        try {
+            FileUtils.copyDirectory(dir2, dir3);
+            FileUtils.deleteDirectory(dir2);
+        } catch (IOException ex) {
+            System.out.println(ex);
         }
 
-        // If Mac
-        if (os.contains("Mac")) {
-            // create directory in users home folder server
-            File dir = new File(home + "/minecrunch/" + name + "_server");
-            if (!dir.exists()) {
-                if (dir.mkdir()) {
-                    System.out.println("Directory created.");
-                } else {
-                    System.out.println("Directory already exists.");
-                }
-            }
-            // download file from server
-            URL url = null;
-            try {
-                url = new URL("http://www.minecrunch.net/download/" + name + "/server_install.zip");
-            } catch (MalformedURLException ex) {
-                System.out.println(ex);
-            }
-            File file = new File(home + "/server_install.zip");
-            try {
-                FileUtils.copyURLToFile(url, file);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            // unzip file in users home folder and extract it to server
-            try {
-                ZipFile zipFile = new ZipFile(home + "/server_install.zip");
-                zipFile.extractAll(home + "/minecrunch/" + name + "_server");
-            } catch (ZipException e) {
-                e.printStackTrace();
-            }
-            File dir2 = new File(home + "/minecrunch/" + name + "_server/server_install");
-            File dir3 = new File(home + "/minecrunch/" + name + "_server");
-            try {
-                FileUtils.copyDirectory(dir2, dir3);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-
-            // clean up and delete zip file that was downloaded
-            file.delete();
-            wd.setVisible(false);
-        }
+        // clean up and delete zip file that was downloaded
+        file.delete();
+        wd.setVisible(false);
     }
 }

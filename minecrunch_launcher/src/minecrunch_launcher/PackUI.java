@@ -27,7 +27,6 @@ package minecrunch_launcher;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -64,6 +63,8 @@ public class PackUI extends javax.swing.JFrame {
     // Get system properties
     String os = System.getProperty("os.name");
     String home = System.getProperty("user.home");
+    String minecrunchDir = null;
+    String minecraftDir = null;
 
     /**
      * Creates new form PackUI
@@ -73,8 +74,7 @@ public class PackUI extends javax.swing.JFrame {
      */
     public PackUI() throws IOException, ZipException {
         // First test for internet connection and decide if connected or not
-        TestInternet();
-        if ("yes".equals(connected)) {
+        if (Utility.HasConnectivity()) {
             GetResources();
             initComponents();
             PopulateComboBoxes();
@@ -94,188 +94,72 @@ public class PackUI extends javax.swing.JFrame {
         System.exit(0);
     }
 
-    public void TestInternet() {
-        // Test for internet connection.
-        try {
-            InetAddress address = InetAddress.getByName("www.minecrunch.net");
-            if (address.isReachable(2000)) {
-                System.out.println("Minecrunch is connected.");
-                connected = "yes";
-            } else {
-                throw new Exception("Ping timeout (2000ms)");
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     public void GetResources() throws MalformedURLException, IOException, ZipException {
         // Download all resources
-        // Windows
         if (os.contains("Windows")) {
-            // Download res.zip
-            URL res = new URL("http://www.minecrunch.net/download/res.zip");
-            File fres = new File(home + "\\.minecrunch\\resources\\res.zip");
-            FileUtils.copyURLToFile(res, fres);
-
-            // Unzip file to .minecrunch/resources directory
-            ZipFile reszip = new ZipFile(home + "\\.minecrunch\\resources\\res.zip");
-            reszip.extractAll(home + "\\.minecrunch\\resources");
-
-            // delete res.zip file
-            fres.delete();
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
         }
+        // Download res.zip
+        URL res = new URL("http://www.minecrunch.net/download/res.zip");
+        File fres = new File(minecrunchDir + "res.zip");
+        FileUtils.copyURLToFile(res, fres);
 
-        // Linux
-        if (os.contains("Linux")) {
-            // Download res.zip
-            URL res = new URL("http://www.minecrunch.net/download/res.zip");
-            File fres = new File(home + "/.minecrunch/resources/res.zip");
-            FileUtils.copyURLToFile(res, fres);
+        // Unzip file to .minecrunch/resources directory
+        ZipFile reszip = new ZipFile(minecrunchDir + "res.zip");
+        reszip.extractAll(minecrunchDir);
 
-            // Unzip file to .minecrunch/resources directory
-            ZipFile reszip = new ZipFile(home + "/.minecrunch/resources/res.zip");
-            reszip.extractAll(home + "/.minecrunch/resources");
-
-            // delete res.zip file
-            fres.delete();
-        }
-
-        // Mac
-        if (os.contains("Mac")) {
-            // Download res.zip
-            URL res = new URL("http://www.minecrunch.net/download/res.zip");
-            File fres = new File(home + "/.minecrunch/resources/res.zip");
-            FileUtils.copyURLToFile(res, fres);
-
-            // Unzip file to .minecrunch/resources directory
-            ZipFile reszip = new ZipFile(home + "/.minecrunch/resources/res.zip");
-            reszip.extractAll(home + "/.minecrunch/resources");
-
-            // delete res.zip file
-            fres.delete();
-        }
+        // delete res.zip file
+        fres.delete();
     }
-    
+
     public void GetNews() {
         // Read news.html file into jEditorPane1
-        // Windows
         if (os.contains("Windows")) {
-            jEditorPane1.setContentType("Text/html");
-            File file = new File(home + "\\.minecrunch\\resources\\news.html");
-            try {
-                jEditorPane1.setPage(file.toURI().toURL());
-            } catch (IOException ex) {
-                Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
         }
-        
-        // Linux
-        if (os.contains("Linux")) {
-            jEditorPane1.setContentType("Text/html");
-            File file = new File(home + "/.minecrunch/resources/news.html");
-            try {
-                jEditorPane1.setPage(file.toURI().toURL());
-            } catch (IOException ex) {
-                Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        // Mac
-        if (os.contains("Mac")) {
-            jEditorPane1.setContentType("Text/html");
-            File file = new File(home + "/.minecrunch/resources/news.html");
-            try {
-                jEditorPane1.setPage(file.toURI().toURL());
-            } catch (IOException ex) {
-                Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        jEditorPane1.setContentType("Text/html");
+        File file = new File(minecrunchDir + "news.html");
+        try {
+            jEditorPane1.setPage(file.toURI().toURL());
+        } catch (IOException ex) {
+            Logger.getLogger(PackUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void PopulateComboBoxes() {
         // Read XML modpack.xml and load content into jComboboxes 1 & 2
+        if (os.contains("Windows")) {
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
+        }
         try {
-            // Windows
-            if (os.contains("Windows")) {
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "\\.minecrunch\\resources\\modpacks.xml");
-                //creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                //using this factory to create an XPath object:
-                XPath xpath = factory.newXPath();
 
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("modpacks");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(minecrunchDir + "modpacks.xml");
+            //creating an XPathFactory:
+            XPathFactory factory = XPathFactory.newInstance();
+            //using this factory to create an XPath object:
+            XPath xpath = factory.newXPath();
 
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jComboBox1.addItem(child.getTextContent());
-                            jComboBox2.addItem(child.getTextContent());
-                        }
-                    }
-                }
-            }
+            // XPath Query for showing all nodes value
+            XPathExpression expr = xpath.compile("modpacks");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            for (int i = 0; i < nodes.getLength(); i++) {
 
-            // Linux
-            if (os.contains("Linux")) {
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
-                //creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                //using this factory to create an XPath object:
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("modpacks");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jComboBox1.addItem(child.getTextContent());
-                            jComboBox2.addItem(child.getTextContent());
-                        }
-                    }
-                }
-            }
-
-            // Mac
-            if (os.contains("Mac")) {
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
-                //creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                //using this factory to create an XPath object:
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("modpacks");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jComboBox1.addItem(child.getTextContent());
-                            jComboBox2.addItem(child.getTextContent());
-                        }
+                Element el = (Element) nodes.item(i);
+                NodeList children = el.getChildNodes();
+                for (int k = 0; k < children.getLength(); k++) {
+                    Node child = children.item(k);
+                    if (child.getNodeType() != Node.TEXT_NODE) {
+                        jComboBox1.addItem(child.getTextContent());
+                        jComboBox2.addItem(child.getTextContent());
                     }
                 }
             }
@@ -287,198 +171,74 @@ public class PackUI extends javax.swing.JFrame {
     public void GetClientNode() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         // Get selected modpack name from jComboBox2
         selected = jComboBox2.getSelectedItem().toString();
-
-        // Windows
         if (os.contains("Windows")) {
-            // Read modpacks.xml and compare child node content to string provided by jCombox2
-            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = Factory.newDocumentBuilder();
-            Document doc = builder.parse(home + "\\.minecrunch\\resources\\modpacks.xml");
-
-            NodeList nodes = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
-                    Element childElement = (Element) node;
-                    if (childElement.getTextContent().contentEquals(selected)) {
-                        // Set node name to string name to pass to LoadClientDetails method
-                        name = childElement.getNodeName();
-                    }
-                }
-            }
-            LoadClientDetails();
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
         }
 
-        // Linux
-        if (os.contains("Linux")) {
-            // Read modpacks.xml and compare child node content to string provided by jCombox2
-            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = Factory.newDocumentBuilder();
-            Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
+        // Read modpacks.xml and compare child node content to string provided by jCombox2
+        DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = Factory.newDocumentBuilder();
+        Document doc = builder.parse(minecrunchDir + "modpacks.xml");
 
-            NodeList nodes = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
-                    Element childElement = (Element) node;
-                    if (childElement.getTextContent().contentEquals(selected)) {
-                        // Set node name to string name to pass to LoadClientDetails method
-                        name = childElement.getNodeName();
-                    }
+        NodeList nodes = doc.getDocumentElement().getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+            if ((node.getNodeType() == Node.ELEMENT_NODE)) {
+                Element childElement = (Element) node;
+                if (childElement.getTextContent().contentEquals(selected)) {
+                    // Set node name to string name to pass to LoadClientDetails method
+                    name = childElement.getNodeName();
                 }
             }
-            LoadClientDetails();
         }
-        // Mac
-        if (os.contains("Mac")) {
-            // Read modpacks.xml and compare child node content to string provided by jCombox2
-            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = Factory.newDocumentBuilder();
-            Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
-
-            NodeList nodes = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
-                    Element childElement = (Element) node;
-                    if (childElement.getTextContent().contentEquals(selected)) {
-                        // Set node name to string name to pass to LoadClientDetails method
-                        name = childElement.getNodeName();
-                    }
-                }
-            }
-            LoadClientDetails();
-        }
+        LoadClientDetails();
     }
 
     public void LoadClientDetails() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         // With name variable provided read specified xml and get specified jpg files then load those parameters into jLabel2 and jTextArea4
-        // Windows
         if (os.contains("Windows")) {
-            // Set label and textarea to nothing
-            if (name.contains("empty")) {
-                ImageIcon imagenone = new ImageIcon();
-                jLabel2.setIcon(imagenone);
-                jTextArea4.setText("");
-            } else {
-                // Load label and textarea with content of xml file and jpg
-                ImageIcon imagenone = new ImageIcon();
-                jLabel2.setIcon(imagenone);
-                jTextArea4.setText("");
-                ImageIcon imagemc = new ImageIcon(home + "\\.minecrunch\\resources\\" + name + ".jpg");
-                jLabel2.setIcon(imagemc);
-
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "\\.minecrunch\\resources\\" + name + "_client.xml");
-
-                // creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                // using this factory to create an XPath object: 
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("client");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jTextArea4.append(child.getTextContent());
-                            jTextArea4.append("\n");
-                            jTextArea4.setCaretPosition(0);
-                        }
-                    }
-                }
-            }
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
         }
 
-        // Linux
-        if (os.contains("Linux")) {
-            // Set label and textarea to nothing
-            if (name.contains("empty")) {
-                ImageIcon imagenone = new ImageIcon();
-                jLabel2.setIcon(imagenone);
-                jTextArea4.setText("");
-            } else {
-                // Load label and textarea with content of xml file and jpg
-                ImageIcon imagenone = new ImageIcon();
-                jLabel2.setIcon(imagenone);
-                jTextArea4.setText("");
+        // Set label and textarea to nothing
+        if (name.contains("empty")) {
+            ImageIcon imagenone = new ImageIcon();
+            jLabel2.setIcon(imagenone);
+            jTextArea4.setText("");
+        } else {
+            // Load label and textarea with content of xml file and jpg
+            ImageIcon imagenone = new ImageIcon();
+            jLabel2.setIcon(imagenone);
+            jTextArea4.setText("");
+            ImageIcon imagemc = new ImageIcon(minecrunchDir + name + ".jpg");
+            jLabel2.setIcon(imagemc);
 
-                ImageIcon imagemc = new ImageIcon(home + "/.minecrunch/resources/" + name + ".jpg");
-                jLabel2.setIcon(imagemc);
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(minecrunchDir + name + "_client.xml");
 
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "/.minecrunch/resources/" + name + "_client.xml");
+            // creating an XPathFactory:
+            XPathFactory factory = XPathFactory.newInstance();
+            // using this factory to create an XPath object: 
+            XPath xpath = factory.newXPath();
 
-                // creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                // using this factory to create an XPath object: 
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("client");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jTextArea4.append(child.getTextContent());
-                            jTextArea4.append("\n");
-                            jTextArea4.setCaretPosition(0);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Mac
-        if (os.contains("Mac")) {
-            // Set label and textarea to nothing
-            if (name.contains("empty")) {
-                ImageIcon imagenone = new ImageIcon();
-                jLabel2.setIcon(imagenone);
-                jTextArea4.setText("");
-            } else {
-                // Load label and textarea with content of xml file and jpg
-                ImageIcon imagenone = new ImageIcon();
-                jLabel2.setIcon(imagenone);
-                jTextArea4.setText("");
-
-                ImageIcon imagemc = new ImageIcon(home + "/.minecrunch/resources/" + name + ".jpg");
-                jLabel2.setIcon(imagemc);
-
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "/.minecrunch/resources/" + name + "_client.xml");
-
-                // creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                // using this factory to create an XPath object: 
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("client");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jTextArea4.append(child.getTextContent());
-                            jTextArea4.append("\n");
-                            jTextArea4.setCaretPosition(0);
-                        }
+            // XPath Query for showing all nodes value
+            XPathExpression expr = xpath.compile("client");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element el = (Element) nodes.item(i);
+                NodeList children = el.getChildNodes();
+                for (int k = 0; k < children.getLength(); k++) {
+                    Node child = children.item(k);
+                    if (child.getNodeType() != Node.TEXT_NODE) {
+                        jTextArea4.append(child.getTextContent());
+                        jTextArea4.append("\n");
+                        jTextArea4.setCaretPosition(0);
                     }
                 }
             }
@@ -488,199 +248,74 @@ public class PackUI extends javax.swing.JFrame {
     public void GetServerNode() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         // Get selected modpack name from jComboBox1
         selected = jComboBox1.getSelectedItem().toString();
-
-        // Windows
         if (os.contains("Windows")) {
-            // Read modpacks.xml and compare child node content to string provided by jCombox2
-            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = Factory.newDocumentBuilder();
-            Document doc = builder.parse(home + "\\.minecrunch\\resources\\modpacks.xml");
-
-            NodeList nodes = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
-                    Element childElement = (Element) node;
-                    if (childElement.getTextContent().contentEquals(selected)) {
-                        name = childElement.getNodeName();
-                    }
-
-                }
-            }
-            LoadServerDetails();
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
         }
 
-        // Linux
-        if (os.contains("Linux")) {
-            // Read modpacks.xml and compare child node content to string provided by jCombox2
-            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = Factory.newDocumentBuilder();
-            Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
+        // Read modpacks.xml and compare child node content to string provided by jCombox2
+        DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = Factory.newDocumentBuilder();
+        Document doc = builder.parse(minecrunchDir + "modpacks.xml");
 
-            NodeList nodes = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
-                    Element childElement = (Element) node;
-                    if (childElement.getTextContent().contentEquals(selected)) {
-                        name = childElement.getNodeName();
-                    }
-
+        NodeList nodes = doc.getDocumentElement().getChildNodes();
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+            if ((node.getNodeType() == Node.ELEMENT_NODE)) {
+                Element childElement = (Element) node;
+                if (childElement.getTextContent().contentEquals(selected)) {
+                    name = childElement.getNodeName();
                 }
+
             }
-            LoadServerDetails();
         }
-
-        // Mac
-        if (os.contains("Mac")) {
-            // Read modpacks.xml and compare child node content to string provided by jCombox2
-            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = Factory.newDocumentBuilder();
-            Document doc = builder.parse(home + "/.minecrunch/resources/modpacks.xml");
-
-            NodeList nodes = doc.getDocumentElement().getChildNodes();
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Node node = nodes.item(i);
-                if ((node.getNodeType() == Node.ELEMENT_NODE)) {
-                    Element childElement = (Element) node;
-                    if (childElement.getTextContent().contentEquals(selected)) {
-                        name = childElement.getNodeName();
-                    }
-
-                }
-            }
-            LoadServerDetails();
-        }
+        LoadServerDetails();
     }
 
     public void LoadServerDetails() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         // With name variable provided read specified xml and get specified jpg files then load those parameters into jLabel2 and jTextArea4
-        // Windows
         if (os.contains("Windows")) {
-            // Set label and textarea to nothing
-            if (name.contains("empty")) {
-                ImageIcon imagenone = new ImageIcon();
-                jLabel1.setIcon(imagenone);
-                jTextArea1.setText("");
-            } else {
-                // Load label and textarea with content of xml file and jpg
-                ImageIcon imagenone = new ImageIcon();
-                jLabel1.setIcon(imagenone);
-                jTextArea1.setText("");
-                ImageIcon imagemc = new ImageIcon(home + "\\.minecrunch\\resources\\" + name + ".jpg");
-                jLabel1.setIcon(imagemc);
-
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "\\.minecrunch\\resources\\" + name + "_server.xml");
-
-                // creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                // using this factory to create an XPath object: 
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("client");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jTextArea1.append(child.getTextContent());
-                            jTextArea1.append("\n");
-                            jTextArea1.setCaretPosition(0);
-                        }
-                    }
-                }
-            }
+            minecrunchDir = home + "\\.minecrunch\\resources\\";
+        } else {
+            minecrunchDir = home + "/.minecrunch/resources/";
         }
 
-        // Linux
-        if (os.contains("Linux")) {
-            // Set label and textarea to nothing
-            if (name.contains("empty")) {
-                ImageIcon imagenone = new ImageIcon();
-                jLabel1.setIcon(imagenone);
-                jTextArea1.setText("");
-            } else {
-                // Load label and textarea with content of xml file and jpg
-                ImageIcon imagenone = new ImageIcon();
-                jLabel1.setIcon(imagenone);
-                jTextArea1.setText("");
+        // Set label and textarea to nothing
+        if (name.contains("empty")) {
+            ImageIcon imagenone = new ImageIcon();
+            jLabel1.setIcon(imagenone);
+            jTextArea1.setText("");
+        } else {
+            // Load label and textarea with content of xml file and jpg
+            ImageIcon imagenone = new ImageIcon();
+            jLabel1.setIcon(imagenone);
+            jTextArea1.setText("");
+            ImageIcon imagemc = new ImageIcon(minecrunchDir + name + ".jpg");
+            jLabel1.setIcon(imagemc);
 
-                ImageIcon imagemc = new ImageIcon(home + "/.minecrunch/resources/" + name + ".jpg");
-                jLabel1.setIcon(imagemc);
+            DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = Factory.newDocumentBuilder();
+            Document doc = builder.parse(minecrunchDir + name + "_server.xml");
 
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "/.minecrunch/resources/" + name + "_server.xml");
+            // creating an XPathFactory:
+            XPathFactory factory = XPathFactory.newInstance();
+            // using this factory to create an XPath object: 
+            XPath xpath = factory.newXPath();
 
-                // creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                // using this factory to create an XPath object: 
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("client");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jTextArea1.append(child.getTextContent());
-                            jTextArea1.append("\n");
-                            jTextArea1.setCaretPosition(0);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Mac
-        if (os.contains("Mac")) {
-            // Set label and textarea to nothing
-            if (name.contains("empty")) {
-                ImageIcon imagenone = new ImageIcon();
-                jLabel1.setIcon(imagenone);
-                jTextArea1.setText("");
-            } else {
-                // Load label and textarea with content of xml file and jpg
-                ImageIcon imagenone = new ImageIcon();
-                jLabel1.setIcon(imagenone);
-                jTextArea1.setText("");
-
-                ImageIcon imagemc = new ImageIcon(home + "/.minecrunch/resources/" + name + ".jpg");
-                jLabel1.setIcon(imagemc);
-
-                DocumentBuilderFactory Factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = Factory.newDocumentBuilder();
-                Document doc = builder.parse(home + "/.minecrunch/resources/" + name + "_server.xml");
-
-                // creating an XPathFactory:
-                XPathFactory factory = XPathFactory.newInstance();
-                // using this factory to create an XPath object: 
-                XPath xpath = factory.newXPath();
-
-                // XPath Query for showing all nodes value
-                XPathExpression expr = xpath.compile("client");
-                Object result = expr.evaluate(doc, XPathConstants.NODESET);
-                NodeList nodes = (NodeList) result;
-                for (int i = 0; i < nodes.getLength(); i++) {
-                    Element el = (Element) nodes.item(i);
-                    NodeList children = el.getChildNodes();
-                    for (int k = 0; k < children.getLength(); k++) {
-                        Node child = children.item(k);
-                        if (child.getNodeType() != Node.TEXT_NODE) {
-                            jTextArea1.append(child.getTextContent());
-                            jTextArea1.append("\n");
-                            jTextArea1.setCaretPosition(0);
-                        }
+            // XPath Query for showing all nodes value
+            XPathExpression expr = xpath.compile("client");
+            Object result = expr.evaluate(doc, XPathConstants.NODESET);
+            NodeList nodes = (NodeList) result;
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Element el = (Element) nodes.item(i);
+                NodeList children = el.getChildNodes();
+                for (int k = 0; k < children.getLength(); k++) {
+                    Node child = children.item(k);
+                    if (child.getNodeType() != Node.TEXT_NODE) {
+                        jTextArea1.append(child.getTextContent());
+                        jTextArea1.append("\n");
+                        jTextArea1.setCaretPosition(0);
                     }
                 }
             }
@@ -703,40 +338,26 @@ public class PackUI extends javax.swing.JFrame {
     }
 
     public void LaunchMinecraft() {
-
-        // Windows
         if (os.contains("Windows")) {
-            try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "\\AppData\\Roaming\\.minecraft\\launcher.jar");
-                System.exit(0);
-
-            } catch (IOException ex) {
-                Logger.getLogger(Minecrunch_launcher.class
-                        .getName()).log(Level.SEVERE, null, ex);
-            }
+            minecraftDir = home + "\\AppData\\Roaming\\.minecraft\\";
         }
-
-        // Linux
+        
         if (os.contains("Linux")) {
+           minecraftDir = home + "/.minecraft/"; 
+        }
+        
+        if (os.contains("Mac")) {
+            minecraftDir = home + "/Library/Application Support/minecraft/";
+        }
+       
             try {
-                Process proc = Runtime.getRuntime().exec("java -jar " + home + "/.minecraft/launcher.jar");
+                Process proc = Runtime.getRuntime().exec("java -jar " + minecraftDir + "launcher.jar");
                 System.exit(0);
 
             } catch (IOException ex) {
                 Logger.getLogger(Minecrunch_launcher.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
-        // Mac
-        try {
-            Process proc = Runtime.getRuntime().exec("java -jar " + home + "/Library/Application Support/minecraft/launcher.jar");
-            System.exit(0);
-
-        } catch (IOException ex) {
-            Logger.getLogger(Minecrunch_launcher.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
